@@ -1,0 +1,86 @@
+[
+  {
+    "bookmaker": "Bwin",
+    "earning": 8.5,
+    "budget_needed": 50,
+    "roi": 0.16,
+    "time_needed": 1
+  },
+  {
+    "bookmaker": "Williamhill",
+    "earning": 45,
+    "budget_needed": 325,
+    "roi": 0.1385,
+    "time_needed": 30
+  },
+  {
+    "bookmaker": "Bet365",
+    "earning": 70,
+    "budget_needed": 700,
+    "roi": 0.1,
+    "time_needed": 7
+  },
+  {
+    "bookmaker": "Planetwin365",
+    "earning": 220,
+    "budget_needed": 2500,
+    "roi": 0.088,
+    "time_needed": 7
+  },
+  {
+    "bookmaker": "Eurobet",
+    "earning": 200,
+    "budget_needed": 2375,
+    "roi": 0.0842,
+    "time_needed": 8
+  },
+  {
+    "bookmaker": "Snai",
+    "earning": 210,
+    "budget_needed": 3000,
+    "roi": 0.07,
+    "time_needed": 10
+  },
+  {
+    "bookmaker": "Leovegas",
+    "earning": 90,
+    "budget_needed": 1400,
+    "roi": 0.0643,
+    "time_needed": 10
+  },
+  {
+    "bookmaker": "Domusbet",
+    "earning": 30,
+    "budget_needed": 550,
+    "roi": 0.0545,
+    "time_needed": 10
+  },
+  {
+    "bookmaker": "Unibet",
+    "earning": 6,
+    "budget_needed": 120,
+    "roi": 0.05,
+    "time_needed": 14
+  },
+  {
+    "bookmaker": "E-play24",
+    "earning": 17,
+    "budget_needed": 450,
+    "roi": 0.0378,
+    "time_needed": 3
+  },
+  {
+    "bookmaker": "Novibet",
+    "earning": 21,
+    "budget_needed": 800,
+    "roi": 0.0263,
+    "time_needed": 7
+  },
+  {
+    "bookmaker": "Starcasino",
+    "earning": 11,
+    "budget_needed": 550,
+    "roi": 0.02,
+    "time_needed": 10
+  }
+]
