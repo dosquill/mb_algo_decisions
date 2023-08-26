@@ -26,3 +26,6 @@ class Client:
 
     def get_remaining_list(self):
         return self.remaining_offer_list
+    
+    def get_name(self):
+        return self.person.get_name()
