@@ -5,6 +5,8 @@ from Class.Client import *
 from Util.util import *
 import copy
 
+folder_name = "results"
+
 def algorithm_step(client, budget_counter, step_num):
     step_results = []
 
@@ -22,6 +24,8 @@ def algorithm_step(client, budget_counter, step_num):
                 num_offers += 1
                 list_completed_offers_step.add_item(offer)
                 client.add_completed_offer(offer)
+                offer.set_step_num(step_num)
+                offer.save_to_csv(f'{folder_name}/{client.get_name()}/step_analysis.csv')
             else:
                 list_offers_lefted_step.add_item(offer)
 
@@ -53,7 +57,7 @@ def algorithm_step(client, budget_counter, step_num):
     client_folder = f"results/{client.get_name()}"  # Modify this to get the client's name
     create_directory(client_folder)  # Create the client's folder if it doesn't exist
 
-    step_filename = f"{client_folder}/step_results.csv"
+    step_filename = f"{client_folder}/step_overall.csv"
     save_steps_results_to_csv(step_results, step_filename)
     ### 
 

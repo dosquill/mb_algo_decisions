@@ -67,8 +67,11 @@ class OfferList:
         
         return copied_list
 
+
+    def save_to_csv(self, csv_filename):
+        for offer in self.list:
+            offer.save_to_csv(csv_filename)
     
-        
 
 
     

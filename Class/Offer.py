@@ -1,4 +1,4 @@
-from typing import Any
+import csv
 
 
 class Offer:
@@ -9,6 +9,7 @@ class Offer:
         self.roi = roi
         self.time_needed = time_needed
         self.completed = False
+        self.step_num = None
 
     #def mark_completed(self):
     #    self.completed = True
@@ -32,3 +33,23 @@ class Offer:
     
     def get_earning(self):
         return self.earning 
+    
+    def get_name(self):
+        return self.bookmaker
+    
+    def save_to_csv(self, csv_filename):
+        with open(csv_filename, 'a', newline='') as csvfile:
+            fieldnames = self.__dict__.keys()  # Get the keys of the object's properties
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            
+            if csvfile.tell() == 0:  # Write header only if the file is empty
+                writer.writeheader()
+
+            writer.writerow(self.__dict__)
+
+    def get_step_num(self):
+        return self.step_num
+    
+    def set_step_num(self, step_num):
+        self.step_num = step_num
+    
