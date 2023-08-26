@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class Offer:
     def __init__(self, bookmaker, earning, budget_needed, roi, time_needed):
         self.bookmaker = bookmaker
@@ -23,3 +26,9 @@ class Offer:
             self.roi,
             self.time_needed
         )
+    
+    def get_budget_needed(self):
+        return self.budget_needed
+    
+    def get_earning(self):
+        return self.earning 

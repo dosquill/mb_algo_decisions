@@ -1,33 +1,35 @@
-from Class.Client import *
+from Class.Person import *
 from Class.Offer import *
 from Class.OfferList import *
+from Class.Client import *
 from Util.util import *
 from Util.step import *
 
 
-def algo(client, total_offer, total_budget):
+def algo(client, total_budget):
     step_num = 1
-    list_results = []
+    step_results = []
 
     ## STEP
-    while (len(total_offer) > 0):
+    while (client.has_remaining_offer()):
         print(f'STEP {step_num}:')
 
         ## TOTAL COUNTER
         initial_budget = total_budget
         profit = 0
         num_offers = 0
-        completed_offers = OfferList()
-        remaining_offer = OfferList()
+        list_completed_offers_step = OfferList()
+        list_offers_lefted_step = OfferList()
         
-        for offer in total_offer:
-            if (total_budget >= offer.budget_needed):
-                total_budget -= offer.budget_needed
-                profit += offer.earning
+        for offer in client.get_remaining_list():
+            if (total_budget >= offer.get_budget_needed()):
+                total_budget -= offer.get_budget_needed()
+                profit += offer.get_earning()
                 num_offers += 1
-                completed_offers.add_item(offer)
+                list_completed_offers_step.add_item(offer)
+                client.add_completed_offer(offer)
             else:
-                remaining_offer.add_item(offer)
+                list_offers_lefted_step.add_item(offer)
 
         inutilized_budget_percentage = round((total_budget / initial_budget) * 100, 2)         # round inutilized_budget_percentage to 2 decimal places
 
@@ -35,7 +37,7 @@ def algo(client, total_offer, total_budget):
             raise Exception('No offers can be completed with the given budget')
 
         
-        statistics = {
+        step_result = {
             'step_num': step_num,
             'profit': profit,
             'num_offers': num_offers,
@@ -44,22 +46,22 @@ def algo(client, total_offer, total_budget):
             'initial_budget': initial_budget,
             }
         
-        total_offer = remaining_offer
+        client.refresh_remaining_list(list_offers_lefted_step)
         total_budget = initial_budget + profit
-        list_results.append(statistics)
+        step_results.append(step_result)
         step_num += 1
        
         print('Completed Offers:') 
-        print(completed_offers)
-        print(f'{statistics}')
+        print(list_completed_offers_step)
+        print(f'{step_result}')
         print('Remaining Offers:')
-        print(remaining_offer)
+        print(list_offers_lefted_step)
         print('\n')
     ## END STEP
 
-    print_statistics(list_results)
+    print_statistics(step_results)
 
-    return list_results
+    return step_results
 
 
     
