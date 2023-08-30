@@ -3,22 +3,20 @@ import json
 from offer import Offer
 
 class Client:
-    # TODO il cliente ha un budget, un guadagno e se è stato consigliato da qualcuno
-    def __init__(self, name: str, surname: str, id: int, referred_by = "", commission = 0, file_path = None):
+    def __init__(self, name: str, surname: str, id: int, file_path: str, referred_by = "", budget = 0, profit = 0, commission = 0):
+        # mandatory parameters
         self.name = name
         self.surname = surname
         self.id = id
-        self.referred_by = referred_by
-        self.commission = commission
-        self.completed_offers = []
         self.file_path = file_path
-        self.budget = 0  # allocated budget
         
-        if file_path is not None:
-            self.remaining_offers = self.load_file()
-        else:
-            self.remaining_offers = []  
-            self.file_path = None
+        # optional parameters
+        self.referred_by = referred_by
+        self.budget = budget                        # allocated budget
+        self.profit = profit                             # profit counter
+        self.completed_offers = []
+        self.remaining_offers = self.load_file()
+        self.commission = commission
 
 
 
@@ -26,11 +24,10 @@ class Client:
     # OVERLOADING
     # toString
     def __str__(self):
-        return f"Client {self.id}\nName: {self.name}\nSurname: {self.surname}\nReferred by: {self.referred_by}\nCommission: {self.commission}\nCompleted offers: {self.completed_offers}\nRemaining offers: {self.remaining_offers}\n"
+        return f"Client {self.id}\nName: {self.name}\nSurname: {self.surname}\nReferred by: {self.referred_by}\nCommission: {self.commission}\n"
 
 
     # GETTERS AND SETTERS
-    """     
     @property 
     def name(self):
         return self.__name
@@ -38,29 +35,33 @@ class Client:
     # NAME
     @name.setter
     def name(self, value):
+        value_name = 'Name'
         if not isinstance(value, str):
-            raise TypeError("Name of a Client should be only a string")
-        if len(value)== 0 :
-            raise TypeError("Name can't be empty")
-        if not value.isalpha():
-            raise ValueError("Name can't be a number")
+            raise Exception(f"{value_name} must be a string.")
+        if value == '':
+            raise Exception(f"{value_name} be empty.")
+        if value == None:
+            raise Exception(f"{value_name} cannot be None.")
         self.__name = value.capitalize()
 
     
-
+    
+    # SURNAME
     @property
     def surname(self):
         return self.__surname
     
     @surname.setter
     def surname(self, value):
+        value_name = 'Surname'
         if not isinstance(value, str):
-            raise TypeError("Surname of a Client should be only a string")
-        if len(value)== 0 :
-            raise TypeError("Surname can't be empty")
-        if not value.isalpha():
-            raise ValueError("Surname can't be a number")
+            raise Exception(f"{value_name} must be a string.")
+        if value == '':
+            raise Exception(f"{value_name} be empty.")
+        if value == None:
+            raise Exception(f"{value_name} cannot be None.")
         self.__surname = value.capitalize()
+
 
 
 
@@ -70,45 +71,38 @@ class Client:
     
     @id.setter
     def id(self, value):
+        value_name = 'Id'
         if not isinstance(value, int):
-            raise TypeError("Id of a Client should be only a number")
+            raise Exception(f"{value_name} of a Client should be only a number")
+        if isinstance(value, bool):
+            raise Exception(f"{value_name} of a Client should be only a boolean")
+        if value == None:
+            raise Exception(f"{value_name} of a Client should not be None")
         if value < 0:
-            raise ValueError("Id can't be negative")
+            raise Exception(f"{value_name} can't be negative")
         self.__id = value
-        
+
 
 
     
-    @property
-    def referred_by(self):
-        return self.__referred_by
-
-    @referred_by.setter
-    def referred_by(self, value):
-        if not isinstance(value, str) and value is not None:
-            raise TypeError("Referred by of a Client should be only a string or None")
-        if not value.isalpha():
-            raise ValueError("Referred by can't be a number")
-        self.__referred_by = value.capitalize()
-
-
     
 
-    @property
-    def commission(self):
-        return self.__commission
-    
-    @commission.setter
-    def commission(self, value):
-        if not isinstance(value, float):
-            raise TypeError("Commission of a Client should be only a float")
-        if value < 0:
-            raise ValueError("Commission can't be negative")
-        self.__commission = value
- """
+    # @property
+    # def commission(self):
+    #     return self.__commission
+    # 
+    # @commission.setter
+    # def commission(self, value):
+    #     if not isinstance(value, float):
+    #         raise TypeError("Commission of a Client should be only a float")
+    #     if value < 0:
+    #         raise ValueError("Commission can't be negative")
+    #     self.__commission = value
+    # 
 
 
 
+    # OTHER METHODS
     def load_file(self) -> list:
         list_offer = []
         with open(self.file_path, 'r') as json_file:
@@ -124,7 +118,5 @@ class Client:
         list_offer.sort(key=lambda x: x.roi, reverse=True)
 
         return list_offer        
-
-
 
 
