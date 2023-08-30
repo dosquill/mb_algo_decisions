@@ -1,0 +1,2 @@
+total_profit,max_step_profit,avg_profit_for_step,min_step_profit,initial_budget,remaining_budget,max_remaining_budget,avg_remaining_budget,min_remaining_budget,num_steps,num_completed_offers,avg_num_offers_per_step,max_inutilized_budget_percentage,avg_inutilized_budget_percentage,min_inutilized_budget_percentage,max_num_offers_per_step,min_num_offers_per_step,commission,referral,total_commission
+928.5,220,154.75,11,3000,3367.5,3367.5,1310.25,433.5,6,12,2.0,85.96,37.66,11.549,5,1,185.7,46.4,232.1
