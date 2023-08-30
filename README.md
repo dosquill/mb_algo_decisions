@@ -20,3 +20,5 @@ https://docs.google.com/spreadsheets/d/1zQEq0Z69iEGfztojEk4b6il0ly6FEhAbxj_Zygg9
 https://xmind.works/share/kllOCyb3
 
 
+### Useful plugin
+mypy
