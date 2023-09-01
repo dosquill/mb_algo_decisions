@@ -9,7 +9,7 @@ folder = "results"
 
 
 client1 = Client(name="Pippo", surname="Caio", id=1, file_path="db/all_offers.json")
-client2 = Client(name="Pluto", surname="Caio", id=2, file_path="db/all_offers.json")
+client2 = Client(name="Pluto", surname="Caio", id=2, file_pa th="db/all_offers.json")
 
 clients.append(client1)
 clients.append(client2)

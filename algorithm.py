@@ -190,6 +190,7 @@ def client_resolution(client: Client, folder: str = None) -> dict:
     print(statistic)
     if folder is not None:
         save_to_csv(statistic, f'{folder}/overall.csv')
+        save_stats(statistic, f'{folder}/stats.csv')
     return statistic
 
 
