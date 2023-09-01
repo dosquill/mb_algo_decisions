@@ -30,7 +30,8 @@ def offer_resolution(client: Client, offer: Offer, folder: str = None) -> dict:
         'total_profit': client.profit
     }
 
-    print(statistics)
+    # 
+    # print(statistics)
 
     if folder is not None:
         # TODO da testare 
@@ -55,25 +56,30 @@ def step_resolution(client: Client, step_num: int = 1, folder: str = None) -> di
     # la lista deve essere sempre ordinata per roi
     client.remaining_offers.sort(key=lambda x: x.roi, reverse=True)
 
+    minimum_budget_required = min([offer.budget_needed for offer in client.remaining_offers])
+
+    # TODO
     for offer in client.remaining_offers:
+        if client.budget < minimum_budget_required:
+            break
+        
         if folder:
             data = offer_resolution(client, offer, folder=folder)
         else:
             data = offer_resolution(client, offer)
         
-        # non si può fare nessun offerta con questo budget, lo step è finito
-        if data is None:
-            break
-
-        num_completed += 1
-        profit += data['offer_profit']
-        completed_offers.append(offer)
-        remaining_budget = data['remaining_budget']
-        inutilize_budget_percentage = round((remaining_budget / initial_budget) * 100, 3)
+        
+        if data is not None:
+            num_completed += 1
+            profit += data['offer_profit']
+            completed_offers.append(offer)
+            remaining_budget = data['remaining_budget']
+            inutilize_budget_percentage = round((remaining_budget / initial_budget) * 100, 3)
         
 
+
     # se in questa fase non sono state completate offerte, allora il budget non più sufficiente
-    if num_completed == 0:                                                                         
+    if num_completed == 0:  
         return None
 
 
@@ -132,6 +138,11 @@ def client_resolution(client: Client, folder: str = None) -> dict:
         step_num += 1
 
 
+    if len(results) == 0:
+        print("No results")
+        return None
+
+
     # TODO vorrei poter suddividere le colonne che arrivano in min, max, avg
     # molte valori si ripetono quindi li assegno
     step_profits = [data['step_profit'] for data in results]
@@ -140,6 +151,7 @@ def client_resolution(client: Client, folder: str = None) -> dict:
     inutilized_budgets = [data['inutilized_budget_percentage'] for data in results]
     lenght = len(results)
 
+    # devo aggiungere current budget
     statistic = {
         'total_profit': client.profit,
         'max_step_profit': max(step_profits),
@@ -154,7 +166,9 @@ def client_resolution(client: Client, folder: str = None) -> dict:
         
         'num_steps': lenght,
         'num_completed_offers': sum(num_completeds),
+        'max_num_offers_per_step': max(num_completeds),
         'avg_num_offers_per_step': sum(num_completeds) / lenght,
+        'min_num_offers_per_step': min(num_completeds),
 
         'max_inutilized_budget_percentage': max(inutilized_budgets),
         'avg_inutilized_budget_percentage': round(sum(inutilized_budgets) / lenght, 2),
@@ -172,12 +186,10 @@ def client_resolution(client: Client, folder: str = None) -> dict:
         statistic['referral'] = round(client.profit * 0.05, 1)
         statistic['total_commission'] = statistic['commission'] + statistic['referral']
 
-    print(client)
 
     print(statistic)
     if folder is not None:
         save_to_csv(statistic, f'{folder}/overall.csv')
-
     return statistic
 
 
@@ -186,11 +198,55 @@ def client_resolution(client: Client, folder: str = None) -> dict:
 
 
 
-
-
-""" 
 # step 4: final algorithm
 # prende una lista di clienti, un budget e mi da la tabella di quali offerte fare e quando
-def algorithm(clients, budget) -> dict:
-    pass
- """
+def algorithm(clients: list, budget: float, folder: str = None) -> dict:
+    results = []
+    num_clients = len(clients)
+
+        
+    # innanzitutto, controlla quanti clienti ci sono
+    if num_clients == 0:
+        print("No clients")
+        return None
+    
+    if num_clients == 1:
+        print("Only one client")
+        return client_resolution(clients[0])
+    
+    
+
+    # ci sono due clienti, alloca il budget. Vero algoritmo effettivo
+    # TODO come si alloca il budget?
+    # crea una lista combinata di offerte di tutti i clienti
+    # CREAZIONE LISTA COMBINATA
+    offers = []
+    for client in clients:
+        offers += client.remaining_offers
+
+
+    # crea una tabella di quante occorrenze ci sono per ogni offerta
+    # TODO come si crea la tabella?
+    offer_occurrences = {}
+    for offer in offers:
+        if offer.name in offer_occurrences:
+            offer_occurrences[offer.name] += 1
+        else:
+            offer_occurrences[offer.name] = 1
+
+
+    print(offer_occurrences)
+    # ora risolvi i clienti
+
+
+    statistic = {
+        'num_clients': num_clients,
+        # budget allocato di ogni cliente
+    }
+
+    
+    # ringraziamenti
+    print(statistic)
+    if folder is not None:
+        save_to_csv(statistic, f'{folder}/results.csv')
+    return statistic

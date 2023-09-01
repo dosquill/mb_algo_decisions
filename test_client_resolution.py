@@ -15,22 +15,53 @@ def client():
 
 # TODO
 def test_success(client):
-    # dobbiamo assumere che il budget iniziale sia almeno uguale all'offerta con budget minimo
+    # c'è almeno un offerta che si può fare
+    assert len(client.remaining_offers) > 0
 
-    client.budget = 3000
-    
+    # se c'è un offerta che si può fare dobbiamo assumere che il budget iniziale sia almeno uguale all'offerta con budget minimo
+    if len(client.remaining_offers) == 1:
+        min_offert_budget = client.remaining_offers[0].budget_needed
+    else:
+        min_offert_budget = min([offer.budget_needed for offer in client.remaining_offers])
+    client.budget = min_offert_budget
+
+
+    # allora la funzione può essere eseguita correttamente
     data = client_resolution(client)
     assert data is not None
 
+
     # il profitto totale è uguale al profitto di tutte le offerte fatte
+    # e il numero di offerte fatte è uguale alla lunghezza della lista delle offerte fatte
+    total_profit = 0
+    offer_counter = 0
+    for p in client.completed_offers:
+        total_profit += p.profit
+        offer_counter += 1
+
+    assert offer_counter == len(client.completed_offers)
+    assert total_profit == client.profit
+
 
     # il budget totale è uguale al budget iniziale + il profitto totale
-    # 
-    # il numero di offerte fatte è uguale al numero di offerte totali
+    assert client.budget == data['initial_budget'] + data['total_profit']
     
-    # se il budget è maggiore o uguale alla somma di tutti i  la lunghezza delle offerte fatte è uguale alla lunghezza delle offerte totali
+    
 
 
-# TODO
-def test_fails():
-    pass
+
+def test_no_offer_fail(client):
+    client.remaining_offers = []
+    assert client_resolution(client) is None
+
+
+
+
+def test_no_budget_fail(client):
+    # se c'è un offerta che si può fare dobbiamo assumere che il budget iniziale sia almeno uguale all'offerta con budget minimo
+    assert len(client.remaining_offers) > 0
+    
+    min_offer_budget = min([offer.budget_needed for offer in client.remaining_offers])
+    client.budget = min_offer_budget -1
+    
+    client_resolution(client) is None

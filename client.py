@@ -1,7 +1,8 @@
-import csv
 import json
+import os
 from offer import Offer
 
+# non esiste un cliente senza una lista di offerte da completare. La lista può essere vuota, ma esiste
 class Client:
     def __init__(self, name: str, surname: str, id: int, file_path: str, referred_by = "", budget = 0, profit = 0, commission = 0):
         # mandatory parameters
@@ -15,7 +16,7 @@ class Client:
         self.budget = budget                        # allocated budget
         self.profit = profit                             # profit counter
         self.completed_offers = []
-        self.remaining_offers = self.load_file()
+        self.remaining_offers = self.load_offers_from_file()
         self.commission = commission
 
 
@@ -24,7 +25,7 @@ class Client:
     # OVERLOADING
     # toString
     def __str__(self):
-        return f"Client {self.id}\nName: {self.name}\nSurname: {self.surname}\nReferred by: {self.referred_by}\nCommission: {self.commission}\n"
+        return f"Client {self.id}\nName: {self.name}\nSurname: {self.surname}\nReferred by: {self.referred_by}\nCommission: {self.commission}\nBudget: {self.budget}\nProfit: {self.profit}\n"
 
 
     # GETTERS AND SETTERS
@@ -85,25 +86,9 @@ class Client:
 
 
     
-    
-
-    # @property
-    # def commission(self):
-    #     return self.__commission
-    # 
-    # @commission.setter
-    # def commission(self, value):
-    #     if not isinstance(value, float):
-    #         raise TypeError("Commission of a Client should be only a float")
-    #     if value < 0:
-    #         raise ValueError("Commission can't be negative")
-    #     self.__commission = value
-    # 
-
-
 
     # OTHER METHODS
-    def load_file(self) -> list:
+    def load_offers_from_file(self) -> list:
         list_offer = []
         with open(self.file_path, 'r') as json_file:
             data = json.load(json_file)
@@ -120,3 +105,22 @@ class Client:
         return list_offer        
 
 
+
+# TODO
+# prendi la lista di clienti da un file json
+# def get_clients_from_json(file_path: str) -> list:
+#     data = []
+# 
+#     # se il file non esiste, ritorna una lista vuota
+#     if not os.path.exists(file_path):
+#         return data
+#     
+#     with open(file_path, 'r') as json_file:
+#         data = json.load(json_file)
+#         i = 0
+#         for client in data:
+#             client = Client(data[i]['name'], data[i]['surname'], data[i]['id'], data[i]['file_path'], data[i]['referred_by'], data[i]['budget'], data[i]['profit'], data[i]['commission'])
+#             data[i] = client
+#             i+=1
+#     
+#         return data
