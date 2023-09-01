@@ -42,12 +42,14 @@ def test_step_success(client):
     assert data['completed_offers'] == [offer.name for offer in client.completed_offers]                                        # le offerte completate sono il nome di tutte le offerte fatte
 
 
-# failure
-def test_step_failures(client):
+def test_no_offers_failures(client):
     # caso 1: non ci sono offerte
     client.remaining_offers = []
     assert step_resolution(client) == None
 
+
+def test_no_budget_failure(client):
+    # TODO non è corretto
     # caso 2: non ci sono abbastanza soldi
     client.budget = 0
     assert step_resolution(client, step_num=1) == None
