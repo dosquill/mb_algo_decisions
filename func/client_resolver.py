@@ -1,8 +1,7 @@
 from pprint import pprint
 from Class.client import Client
 from utils.saving_stats import *
-from func.offer_resolver import *
-from func.step_resolver import *
+from func.step_resolver import step_resolver
 
 
 

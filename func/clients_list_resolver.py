@@ -1,11 +1,7 @@
 from pprint import pprint
-import json
-from Class.client import Client
-from Class.offer import Offer
 from utils.saving_stats import *
-from func.offer_resolver import *
-from func.step_resolver import *
-from func.client_resolver import *
+from func.step_resolver import step_resolver
+from func.client_resolver import client_resolver
 
 
 
