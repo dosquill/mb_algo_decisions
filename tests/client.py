@@ -1,5 +1,5 @@
 import pytest
-from client import Client
+from Class.client import Client
 
 
 real_file_name = 'db/all_offers.json'

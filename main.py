@@ -1,11 +1,15 @@
 # Main file for the project
 from pprint import pprint
-from client import Client 
-from algorithm import *
+from Class.client import Client 
+from func.clients_list_resolver import *
+from func.offer_resolver import *
+from func.step_resolver import *
+from func.client_resolver import *
+
 
 # testing main algorithm
 #budget = 2192
-budget = 4000
+budget = 3000
 folder = "results"
 
 # testing algorithm
@@ -21,6 +25,7 @@ clients.append(client1)
 clients.append(client2)
 clients.append(client3)
 
+data = client_resolver(client1, folder)
+#data = clients_list_resolver(clients, budget, folder) 
 
-data = clients_list_resolver(clients, budget, folder) 
 

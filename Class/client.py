@@ -1,5 +1,5 @@
 import json
-from offer import Offer
+from Class.offer import Offer
 
 # non esiste un cliente senza una lista di offerte da completare. La lista può essere vuota, ma esiste
 class Client:
