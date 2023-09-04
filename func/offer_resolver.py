@@ -35,7 +35,7 @@ def offer_resolver(client: Client, offer: Offer, folder: str = None) -> dict:
     # SAVE STATISTICS
     # print(statistics)
     # save_to_csv(statistics, folder, f'/offers/{offer.name}.csv')
-    # save_stats_json(statistics, folder, f'/offers/{offer.name}.json')
+    # save_stats_json(statistics, folder, f'{client.name}/offers/{offer.name}.json')
 
     return statistics
 

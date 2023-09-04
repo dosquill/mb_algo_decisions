@@ -69,7 +69,7 @@ def step_resolver(client: Client, step_num: int = 1, folder: str = None) -> dict
     # SAVE STATISTICS
     # print(statistic)
     # save_to_csv(statistic, folder, filename=f'/step/{step_num}.csv') 
-    # save_stats_json(statistic, folder, filename=f'/step/{step_num}.json') 
+    # save_stats_json(statistic, folder, filename=f'{client.name}/step/{step_num}.json') 
 
     return statistic
 

@@ -13,8 +13,6 @@ def client_resolver(client: Client, folder: str = None) -> dict:
     initial_budget = client.budget
     step_num = 1
     results = []
-    if folder:
-        folder += f'/{client.name}'
 
 
     while (len(client.remaining_offers) > 0):
@@ -95,7 +93,7 @@ def client_resolver(client: Client, folder: str = None) -> dict:
 
     # print(statistic)
     #save_to_csv(statistic, folder, filename='/overall.csv')
-    save_stats_json(statistic, folder, filename='/stats.json')
+    save_stats_json(statistic, folder, filename=f'/{client.name}/stats.json')
 
     return statistic
 
