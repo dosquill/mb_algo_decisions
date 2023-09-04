@@ -1,0 +1,237 @@
+{
+    "initial_data": {
+        "num_clients": 3,
+        "initial_budget": 4000,
+        "total_offers_num": 22,
+        "offer_occurrences": {
+            "Bwin": 3,
+            "Bet365": 3,
+            "Eurobet": 3,
+            "Snai": 3,
+            "Williamhill": 2,
+            "Planetwin365": 2,
+            "Leovegas": 1,
+            "Domusbet": 1,
+            "Unibet": 1,
+            "E-play24": 1,
+            "Novibet": 1,
+            "Starcasino": 1
+        },
+        "total_roi": 23.86
+    },
+    "in_between_data": {
+        "step_allocation": {
+            "various_budget": {
+                "Pippo": 1480.0,
+                "Pluto": 1480.0,
+                "Paperino": 1040.0
+            },
+            "weights": {
+                "Pippo": 0.37,
+                "Pluto": 0.37,
+                "Paperino": 0.26
+            },
+            "average_roi_per_client": {
+                "Pippo": 10.605,
+                "Pluto": 10.844999999999999,
+                "Paperino": 7.529166666666666
+            },
+            "total_roi": 28.98
+        },
+        "1": {
+            "Pippo": {
+                "step_num": 1,
+                "step_profit": 78.5,
+                "num_completed_offers": 2,
+                "inutilized_budget_percentage": 49.324,
+                "initial_budget": 1480.0,
+                "remaining_budget": 730.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Bet365"
+                ]
+            },
+            "Pluto": {
+                "step_num": 1,
+                "step_profit": 123.5,
+                "num_completed_offers": 3,
+                "inutilized_budget_percentage": 27.365,
+                "initial_budget": 1480.0,
+                "remaining_budget": 405.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Williamhill",
+                    "Bet365"
+                ]
+            },
+            "Paperino": {
+                "step_num": 5,
+                "step_profit": 90,
+                "num_completed_offers": 1,
+                "inutilized_budget_percentage": 3.811,
+                "initial_budget": 1455.47,
+                "remaining_budget": 55.47000000000003,
+                "completed_offers": [
+                    "Leovegas"
+                ]
+            }
+        },
+        "2": {
+            "Pippo": {
+                "step_num": 1,
+                "step_profit": 78.5,
+                "num_completed_offers": 2,
+                "inutilized_budget_percentage": 49.324,
+                "initial_budget": 1480.0,
+                "remaining_budget": 730.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Bet365"
+                ]
+            },
+            "Pluto": {
+                "step_num": 1,
+                "step_profit": 123.5,
+                "num_completed_offers": 3,
+                "inutilized_budget_percentage": 27.365,
+                "initial_budget": 1480.0,
+                "remaining_budget": 405.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Williamhill",
+                    "Bet365"
+                ]
+            },
+            "Paperino": {
+                "step_num": 5,
+                "step_profit": 90,
+                "num_completed_offers": 1,
+                "inutilized_budget_percentage": 3.811,
+                "initial_budget": 1455.47,
+                "remaining_budget": 55.47000000000003,
+                "completed_offers": [
+                    "Leovegas"
+                ]
+            }
+        },
+        "3": {
+            "Pippo": {
+                "step_num": 1,
+                "step_profit": 78.5,
+                "num_completed_offers": 2,
+                "inutilized_budget_percentage": 49.324,
+                "initial_budget": 1480.0,
+                "remaining_budget": 730.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Bet365"
+                ]
+            },
+            "Pluto": {
+                "step_num": 1,
+                "step_profit": 123.5,
+                "num_completed_offers": 3,
+                "inutilized_budget_percentage": 27.365,
+                "initial_budget": 1480.0,
+                "remaining_budget": 405.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Williamhill",
+                    "Bet365"
+                ]
+            },
+            "Paperino": {
+                "step_num": 5,
+                "step_profit": 90,
+                "num_completed_offers": 1,
+                "inutilized_budget_percentage": 3.811,
+                "initial_budget": 1455.47,
+                "remaining_budget": 55.47000000000003,
+                "completed_offers": [
+                    "Leovegas"
+                ]
+            }
+        },
+        "4": {
+            "Pippo": {
+                "step_num": 1,
+                "step_profit": 78.5,
+                "num_completed_offers": 2,
+                "inutilized_budget_percentage": 49.324,
+                "initial_budget": 1480.0,
+                "remaining_budget": 730.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Bet365"
+                ]
+            },
+            "Pluto": {
+                "step_num": 1,
+                "step_profit": 123.5,
+                "num_completed_offers": 3,
+                "inutilized_budget_percentage": 27.365,
+                "initial_budget": 1480.0,
+                "remaining_budget": 405.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Williamhill",
+                    "Bet365"
+                ]
+            },
+            "Paperino": {
+                "step_num": 5,
+                "step_profit": 90,
+                "num_completed_offers": 1,
+                "inutilized_budget_percentage": 3.811,
+                "initial_budget": 1455.47,
+                "remaining_budget": 55.47000000000003,
+                "completed_offers": [
+                    "Leovegas"
+                ]
+            }
+        },
+        "5": {
+            "Pippo": {
+                "step_num": 1,
+                "step_profit": 78.5,
+                "num_completed_offers": 2,
+                "inutilized_budget_percentage": 49.324,
+                "initial_budget": 1480.0,
+                "remaining_budget": 730.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Bet365"
+                ]
+            },
+            "Pluto": {
+                "step_num": 1,
+                "step_profit": 123.5,
+                "num_completed_offers": 3,
+                "inutilized_budget_percentage": 27.365,
+                "initial_budget": 1480.0,
+                "remaining_budget": 405.0,
+                "completed_offers": [
+                    "Bwin",
+                    "Williamhill",
+                    "Bet365"
+                ]
+            },
+            "Paperino": {
+                "step_num": 5,
+                "step_profit": 90,
+                "num_completed_offers": 1,
+                "inutilized_budget_percentage": 3.811,
+                "initial_budget": 1455.47,
+                "remaining_budget": 55.47000000000003,
+                "completed_offers": [
+                    "Leovegas"
+                ]
+            }
+        }
+    },
+    "final_data": {
+        "total_step_num": 6,
+        "final_budget": 4500.5,
+        "total_profit": 500.5
+    }
+}

@@ -1,5 +1,4 @@
 import json
-import os
 from offer import Offer
 
 # non esiste un cliente senza una lista di offerte da completare. La lista può essere vuota, ma esiste
@@ -103,6 +102,12 @@ class Client:
         list_offer.sort(key=lambda x: x.roi, reverse=True)
 
         return list_offer        
+    
+    
+    def calculate_average_roi(self):
+        total_roi = round(sum(offer.roi for offer in self.remaining_offers),2)
+        return total_roi / len(self.remaining_offers) if len(self.remaining_offers) != 0 else 0
+
 
 
 
