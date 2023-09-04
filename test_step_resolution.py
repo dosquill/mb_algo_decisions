@@ -1,7 +1,7 @@
 import pytest
 import copy
 from client import Client
-from algorithm import step_resolution, offer_resolution
+from offer_resolver import step_resolution, offer_resolution
 
 
 

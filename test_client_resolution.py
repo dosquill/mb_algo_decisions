@@ -1,6 +1,6 @@
 import pytest
 from client import Client
-from algorithm import step_resolution, offer_resolution, client_resolution
+from offer_resolver import step_resolution, offer_resolution, client_resolution
 
 
 @pytest.fixture
