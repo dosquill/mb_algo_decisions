@@ -1,7 +1,7 @@
 import pytest
 import copy
 from Class.client import Client
-from algorithm import *
+from func.step_resolver import *
 
 
 

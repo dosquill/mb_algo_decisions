@@ -1,7 +1,7 @@
 import pytest
 from Class.offer import Offer
 from Class.client import Client
-from algorithm import *
+from func.offer_resolver import *
 
 
 @pytest.fixture

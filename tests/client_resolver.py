@@ -1,6 +1,6 @@
 import pytest
 from Class.client import Client
-from algorithm import *
+from func.client_resolver import *
 
 
 @pytest.fixture
