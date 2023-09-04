@@ -1,6 +1,6 @@
 import pytest
-from client import Client
-from algorithm import step_resolution, offer_resolution, client_resolution
+from Class.client import Client
+from algorithm import *
 
 
 @pytest.fixture
@@ -27,7 +27,7 @@ def test_success(client):
 
 
     # allora la funzione può essere eseguita correttamente
-    data = client_resolution(client)
+    data = client_resolver(client)
     assert data is not None
 
 
@@ -52,7 +52,7 @@ def test_success(client):
 
 def test_no_offer_fail(client):
     client.remaining_offers = []
-    assert client_resolution(client) is None
+    assert client_resolver(client) is None
 
 
 
@@ -64,4 +64,4 @@ def test_no_budget_fail(client):
     min_offer_budget = min([offer.budget_needed for offer in client.remaining_offers])
     client.budget = min_offer_budget -1
     
-    client_resolution(client) is None
+    client_resolver(client) is None

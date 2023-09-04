@@ -1,7 +1,7 @@
 import pytest
 import copy
-from client import Client
-from algorithm import step_resolution, offer_resolution
+from Class.client import Client
+from algorithm import *
 
 
 
@@ -31,7 +31,7 @@ def test_step_success(client):
     assert len(client.remaining_offers) > 0                                                                             # ci sono offerte da fare
 
     # risoluzione offerta
-    data = step_resolution(client, step_num=step_num)
+    data = step_resolver(client, step_num=step_num)
     assert data is not None                                                                                             # almeno uno step è stato completato
 
     assert data['step_num'] == 1
@@ -45,14 +45,14 @@ def test_step_success(client):
 def test_no_offers_failures(client):
     # caso 1: non ci sono offerte
     client.remaining_offers = []
-    assert step_resolution(client) == None
+    assert step_resolver(client) == None
 
 
 def test_no_budget_failure(client):
     # TODO non è corretto
     # caso 2: non ci sono abbastanza soldi
     client.budget = 0
-    assert step_resolution(client, step_num=1) == None
+    assert step_resolver(client, step_num=1) == None
 
 
 
@@ -83,7 +83,7 @@ def test_2step_success(client):
 
 
     # risoluzione offerta 1
-    data1 = step_resolution(client, step_num=1)
+    data1 = step_resolver(client, step_num=1)
     assert data1 is not None  
     assert data1['num_completed_offers'] >= 1
     assert data1['initial_budget'] == initial_budget
@@ -92,7 +92,7 @@ def test_2step_success(client):
     # risoluzione offerta 2
     # assumiamo che abbiamo ancora offerte da fare
     assert len(client.remaining_offers) > 0
-    data2 = step_resolution(client, step_num=2)
+    data2 = step_resolver(client, step_num=2)
     assert data2 is not None
     assert data2['num_completed_offers'] >= 1
 

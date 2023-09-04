@@ -1,8 +1,8 @@
 from pprint import pprint
 import json
-from client import Client
-from offer import Offer
-from utils import *
+from Class.client import Client
+from Class.offer import Offer
+from utils.util import *
 
 
 # Nota, None è quando non si può farre, Nulla appunto

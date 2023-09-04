@@ -1,5 +1,5 @@
 import pytest
-from offer import Offer
+from Class.offer import Offer
 
 
 @pytest.fixture

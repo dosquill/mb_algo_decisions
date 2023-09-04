@@ -1,6 +1,6 @@
 # Main file for the project
 from pprint import pprint
-from client import Client 
+from Class.client import Client 
 from algorithm import *
 
 # testing main algorithm
