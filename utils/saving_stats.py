@@ -3,15 +3,31 @@ import csv
 import json
 
 
-def save_to_csv(statistics, file_path):
-    fieldnames = statistics.keys()
+def basic_operation(folder, filename):
+    # se la cartella non esiste, vuol dire che non avevo intenzione di salvare i dati
+    if folder is None:
+        exit()
+
+    path = f'{folder}/{filename}'
 
     # se la cartella non esiste, creala
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
 
     # se quel file esiste già cancellalo
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    if os.path.exists(path):
+        os.remove(path)
+    
+    return path
+
+
+
+
+
+
+def save_to_csv(statistics, folder, filename):
+    file_path = basic_operation(folder, filename)
+    
+    fieldnames = statistics.keys()
 
     with open(file_path, 'w', newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -25,9 +41,12 @@ def save_to_csv(statistics, file_path):
 
 
 # better way to print
-def save_stats(statistic, filename):
+def save_stats(statistic, folder, filename):
+    path = basic_operation(folder, filename)
+    
     # Crea un dizionario per raccogliere i dati per le colonne Min, Max e Avg
     stats_dict = {}
+
 
     # Estrai i dati dal dizionario statistic e riempi il dizionario stats_dict
     for param, value in statistic.items():
@@ -51,7 +70,7 @@ def save_stats(statistic, filename):
                 stats_dict[param_name]['Avg'] = value
 
     # Crea il file CSV e scrivi i dati
-    with open(filename, mode='w', newline='') as file:
+    with open(path, mode='w', newline='') as file:
         writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
         # Scrivi l'intestazione (nomi delle colonne)
@@ -60,3 +79,15 @@ def save_stats(statistic, filename):
         # Scrivi i dati
         for param, values in stats_dict.items():
             writer.writerow([param, values['Min'], values['Max'], values['Avg']])
+
+
+
+
+
+
+
+def save_stats_json(statistic, folder, filename):
+    path = basic_operation(folder, filename)
+
+    with open(path, 'w') as outfile:
+        json.dump(statistic, outfile, indent=4, sort_keys=True)

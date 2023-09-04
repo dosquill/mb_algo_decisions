@@ -2,9 +2,10 @@ from pprint import pprint
 import json
 from Class.client import Client
 from Class.offer import Offer
-from utils.util import *
+from utils.saving_stats import *
 from func.offer_resolver import *
 from func.step_resolver import *
+from func.client_resolver import *
 
 
 
@@ -142,14 +143,10 @@ def clients_list_resolver(clients: list, total_budget: float, folder: str = None
 
 
 
+    # SAVE STATISTICS
+    save_stats_json(statistic, folder, filename='results.json')
+    # save_to_csv(statistic, f'{folder}/results.csv')
 
-    ## PRINTING
-    if folder is not None:
-        # if file already exists, delete it
-        if os.path.exists(f'{folder}/results.json'):
-            os.remove(f'{folder}/results.json')
-        json.dump(statistic, open(f'{folder}/results.json', 'w'), indent=4)
-        # save_to_csv(statistic, f'{folder}/results.csv')
     return statistic
 
 
