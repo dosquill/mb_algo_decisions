@@ -1,13 +1,16 @@
+from pprint import pprint
+import json
 from client import Client
 from offer import Offer
 from utils import *
 
+
 # Nota, None è quando non si può farre, Nulla appunto
 
-# part 1 of algorithm: offer resolution
-# dato un cliente e un offerta, se questa non è già stata completata la completa, budget permettendo
-# ritorna
-def offer_resolution(client: Client, offer: Offer, folder: str = None) -> dict:
+
+# part 1: risoluzione di un offerta
+# questo è il componente base. Dato un cliente e un offerta, se questa non è già stata completata la completa, budget permettendo
+def offer_resolver(client: Client, offer: Offer, folder: str = None) -> dict:
     initial_budget = client.budget
 
     # se l'offerta è già stata fatta oppure
@@ -43,9 +46,15 @@ def offer_resolution(client: Client, offer: Offer, folder: str = None) -> dict:
 
 
 
-# part 2 of algorithm: step resolution
-# quest'algoritmo risolve uno step, ovvero risolve una lista di offerte, dato un budget
-def step_resolution(client: Client, step_num: int = 1, folder: str = None) -> dict:
+
+
+
+
+
+
+# part 2: risoluzione di uno step
+# Aggiungiamo un altro layer, lo step. Lo step è una lista di offerte fattibili dato un budget. Quest'algoritmo lo risolve lo risolve.
+def step_resolver(client: Client, step_num: int = 1, folder: str = None) -> dict:
     initial_budget = client.budget
     profit = 0
     completed_offers = []
@@ -64,9 +73,9 @@ def step_resolution(client: Client, step_num: int = 1, folder: str = None) -> di
             break
         
         if folder:
-            data = offer_resolution(client, offer, folder=folder)
+            data = offer_resolver(client, offer, folder=folder)
         else:
-            data = offer_resolution(client, offer)
+            data = offer_resolver(client, offer)
         
         
         if data is not None:
@@ -99,7 +108,7 @@ def step_resolution(client: Client, step_num: int = 1, folder: str = None) -> di
         'completed_offers': [offer.name for offer in completed_offers],    # aggiungi solo una lista di nomi
     }
 
-    print(statistic)
+    #print(statistic)
         
     if folder is not None:
         save_to_csv(statistic, f'{folder}/step/{step_num}.csv') 
@@ -114,10 +123,12 @@ def step_resolution(client: Client, step_num: int = 1, folder: str = None) -> di
 
 
 
-# TODO
-# part 3 of algorithm: client resolution
-# crea una serie di step fino a quando non ci sono più offerte da fare
-def client_resolution(client: Client, folder: str = None) -> dict:
+
+
+
+# part 3: risoluzione di un cliente
+# Il cliente si risolve quando non ci sono più offerte da fare o quando il budget non è più sufficiente. Lo risolve per step
+def client_resolver(client: Client, folder: str = None) -> dict:
     initial_budget = client.budget
     step_num = 1
     results = []
@@ -127,9 +138,9 @@ def client_resolution(client: Client, folder: str = None) -> dict:
 
     while (len(client.remaining_offers) > 0):
         if folder:
-            data = step_resolution(client, step_num, folder=folder)
+            data = step_resolver(client, step_num, folder=folder)
         else:
-            data = step_resolution(client, step_num)
+            data = step_resolver(client, step_num)
         
         if data is None:
             break
@@ -199,55 +210,153 @@ def client_resolution(client: Client, folder: str = None) -> dict:
 
 
 
-# step 4: final algorithm
-# prende una lista di clienti, un budget e mi da la tabella di quali offerte fare e quando
-def algorithm(clients: list, budget: float, folder: str = None) -> dict:
-    results = []
-    num_clients = len(clients)
 
-        
+
+
+
+
+
+
+# step 4: risolutore di una lista di clienti
+# prende una lista di clienti, un budget, alloca il budget per quei clienti e ne risolve uno step
+def clients_list_resolver(clients: list, total_budget: float, folder: str = None) -> dict:
+    initial_budget = total_budget
+    num_clients = len(clients)
+    total_offers_num = sum([len(client.remaining_offers) for client in clients])
+
+    in_between_data = {}
+
+    # Dictionary to store the count of each offer name
+    offer_occurrences = {}  
+    for client in clients:
+        # Loop through each remaining offer for this client
+        for offer in client.remaining_offers:
+            # Increment the count for this offer name in the dictionary
+            offer_name = offer.name  # Assuming the Offer class has a 'name' attribute
+            if offer_name in offer_occurrences:
+                offer_occurrences[offer_name] += 1
+            else:
+                offer_occurrences[offer_name] = 1
+
+
+
     # innanzitutto, controlla quanti clienti ci sono
     if num_clients == 0:
         print("No clients")
         return None
     
+    
     if num_clients == 1:
         print("Only one client")
-        return client_resolution(clients[0])
+        return client_resolver(clients[0])
     
     
-
-    # ci sono due clienti, alloca il budget. Vero algoritmo effettivo
-    # TODO come si alloca il budget?
-    # crea una lista combinata di offerte di tutti i clienti
-    # CREAZIONE LISTA COMBINATA
-    offers = []
-    for client in clients:
-        offers += client.remaining_offers
-
-
-    # crea una tabella di quante occorrenze ci sono per ogni offerta
-    # TODO come si crea la tabella?
-    offer_occurrences = {}
-    for offer in offers:
-        if offer.name in offer_occurrences:
-            offer_occurrences[offer.name] += 1
-        else:
-            offer_occurrences[offer.name] = 1
-
-
-    print(offer_occurrences)
-    # ora risolvi i clienti
+    # BUDGET ALLOCATION (kept within the main function)
+    def budget_allocation():
+        # Calculate the average ROI for each client
+        avg_roi_per_client = {client.name: client.calculate_average_roi() for client in clients}
+        
+        # Calculate the total ROI
+        total_roi = round(sum(avg_roi_per_client.values()), 2)
+        
+        # Calculate the weight for each client
+        weights = {name: round((roi / total_roi), 2) for name, roi in avg_roi_per_client.items()}
+        
+        various_budget = {}
+        # Allocate the budget based on the calculated weight
+        for client in clients:
+            client.budget = round(total_budget * weights.get(client.name, 0), 2)
+            various_budget[client.name] = client.budget
+        
+        return various_budget, weights, avg_roi_per_client, total_roi
 
 
-    statistic = {
-        'num_clients': num_clients,
-        # budget allocato di ogni cliente
+    various_budget, weights, average_roi_per_client, total_roi = budget_allocation()
+    allocation = {
+        'various_budget': various_budget,
+        'weights': weights,
+        'average_roi_per_client': average_roi_per_client,
+        'total_roi': total_roi,
     }
 
-    
-    # ringraziamenti
-    print(statistic)
+
+    global_step_num = 1
+    global_results = {}
+    total_profit = 0
+    # STEP OF CLIENT RESOLVER
+    while True: 
+        step_profit = 0
+
+        
+        for client in clients:
+            if len(client.remaining_offers) == 0:
+                continue    # skip to the next client if this haven't no more remaining offers
+
+            data = step_resolver(client, global_step_num)
+            in_between_data['step_allocation'] = allocation
+            
+            if data is not None:
+                in_between_data[global_step_num] = global_results
+                step_profit += data['step_profit']
+                global_results[client.name] = data
+
+        total_profit += step_profit
+        total_budget += step_profit
+
+        # reallocate the budget
+        # come varia l'allocazione nel tempo?        
+        various_budget, weights, average_roi_per_client, total_roi = budget_allocation()
+
+        if step_profit == 0:
+            break
+
+        global_step_num += 1
+
+
+
+
+    # EXITING CODE
+    # JSON FORMATTING DATA
+    initial_data = {
+        'num_clients': num_clients,
+        'initial_budget': initial_budget,
+        'total_offers_num': total_offers_num,
+        'offer_occurrences': offer_occurrences,  # Dictionary to store the count of each offer name
+        'total_roi': total_roi,
+    }
+
+    final_data = {
+        'total_step_num': global_step_num,
+        'final_budget': total_budget,
+        'total_profit': total_budget - initial_budget,
+    }
+
+
+
+
+    # COMPILE STATISTICS
+    statistic = {
+        'initial_data': initial_data,
+
+        # in between data   
+        'in_between_data': in_between_data,
+        
+        # final data
+        'final_data': final_data,
+    }
+
+
+
+
+    ## PRINTING
     if folder is not None:
-        save_to_csv(statistic, f'{folder}/results.csv')
+        # if file already exists, delete it
+        if os.path.exists(f'{folder}/results.json'):
+            os.remove(f'{folder}/results.json')
+        json.dump(statistic, open(f'{folder}/results.json', 'w'), indent=4)
+        # save_to_csv(statistic, f'{folder}/results.csv')
     return statistic
+
+
+
+
