@@ -3,7 +3,7 @@ from client import Client
 from algorithm import *
 
 # testing main algorithm
-budget = 5000
+budget = 2192
 folder = "results"
 """ clients = []
 
@@ -16,5 +16,5 @@ clients.append(client2)
 
 data = algorithm(clients, budget) """
 
-client = Client(name="Pippo", surname="Caio", id=1, budget=budget, file_path="db/all_offers.json")
+client = Client(name="Stefano", surname="Squillante", id=1, budget=budget, file_path="db/all_offers.json")
 data = client_resolution(client, folder)

@@ -1,0 +1,6 @@
+Parameter,Min,Max,Avg
+step_profit,32,220,N/A
+profit_for_step,N/A,N/A,143.7
+remaining_budget,83.5,1528.5,543.8
+num_offers_per_step,1,5,2.2
+inutilized_budget_percentage,3.396,53.101,20.84
