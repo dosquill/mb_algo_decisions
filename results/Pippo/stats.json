@@ -1,0 +1,37 @@
+{
+    "commission": 97.7,
+    "initial_budget": 3000,
+    "inutilized_budget_percentage": {
+        "avg": 35.45,
+        "max": 75.0,
+        "min": 8.495,
+        "total": 8.495
+    },
+    "num_completed_offers": {
+        "avg": 1.33,
+        "max": 2,
+        "min": 1,
+        "total": 4
+    },
+    "num_offers_per_step": {
+        "avg": 1.33,
+        "max": 2,
+        "min": 1
+    },
+    "num_steps": 3,
+    "referral": 24.4,
+    "remaining_budget": {
+        "avg": 1077.33,
+        "max": 2250,
+        "min": 278.5,
+        "total": 278.5
+    },
+    "step_profit": {
+        "avg": 162.83,
+        "max": 210,
+        "min": 78.5,
+        "total": 488.5
+    },
+    "total_commission": 122.1,
+    "total_profit": 488.5
+}

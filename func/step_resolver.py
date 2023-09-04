@@ -1,6 +1,6 @@
 from pprint import pprint
 from Class.client import Client
-from utils.util import *
+from utils.saving_stats import *
 from func.offer_resolver import *
 
 
@@ -64,11 +64,12 @@ def step_resolver(client: Client, step_num: int = 1, folder: str = None) -> dict
         'remaining_budget': remaining_budget,
         'completed_offers': [offer.name for offer in completed_offers],    # aggiungi solo una lista di nomi
     }
+    
 
-    #print(statistic)
-        
-    if folder is not None:
-        save_to_csv(statistic, f'{folder}/step/{step_num}.csv') 
+    # SAVE STATISTICS
+    # print(statistic)
+    # save_to_csv(statistic, folder, filename=f'/step/{step_num}.csv') 
+    # save_stats_json(statistic, folder, filename=f'/step/{step_num}.json') 
 
     return statistic
 

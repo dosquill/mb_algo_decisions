@@ -1,8 +1,7 @@
 from pprint import pprint
-import json
 from Class.client import Client
 from Class.offer import Offer
-from utils.util import *
+from utils.saving_stats import *
 
 
 # Nota, None è quando non si può farre, Nulla appunto
@@ -33,12 +32,10 @@ def offer_resolver(client: Client, offer: Offer, folder: str = None) -> dict:
         'total_profit': client.profit
     }
 
-    # 
+    # SAVE STATISTICS
     # print(statistics)
-
-    if folder is not None:
-        # TODO da testare 
-        save_to_csv(statistics, f'{folder}/offers/{offer.name}.csv')
+    # save_to_csv(statistics, folder, f'/offers/{offer.name}.csv')
+    # save_stats_json(statistics, folder, f'/offers/{offer.name}.json')
 
     return statistics
 
