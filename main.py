@@ -1,18 +1,11 @@
 # Main file for the project
 from pprint import pprint
 from client import Client 
-from offer_resolver import *
-from utils import *
-from clients_list_resolver import *
-from step_resolver import *
-from client_resolver import *
-from offer import Offer
-
-
+from algorithm import *
 
 # testing main algorithm
 #budget = 2192
-""" budget = 4000
+budget = 4000
 folder = "results"
 
 # testing algorithm
@@ -31,10 +24,3 @@ clients.append(client3)
 
 data = clients_list_resolver(clients, budget, folder) 
 
- """
-
-budget = 4000
-client1 = Client(name="Pippo", surname="Caio", id=1, file_path="db/Pippo.json")
-
-data = client_resolver(client1, folder="results")
-print(data)
