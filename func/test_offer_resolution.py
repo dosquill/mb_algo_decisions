@@ -1,7 +1,13 @@
 import pytest
 from offer import Offer
 from client import Client
-from algorithm import offer_resolution
+
+if __name__ == "__main__":
+    from .offer_resolver import offer_resolver
+    pytest.main()
+else:
+    from func.offer_resolver import offer_resolver
+
 
 
 @pytest.fixture
@@ -23,7 +29,7 @@ def client():
 
 
 # single offer resolution
-def test_offer_resolution(offer, client):
+def test_offer_resolver(offer, client):
     offer.budget_needed = 100
     client.budget = 1000
 
@@ -34,7 +40,7 @@ def test_offer_resolution(offer, client):
     assert offer not in client.completed_offers   # l'offerta non è già presente nella lista di offerte completate del cliente
 
     # conclusione
-    data = offer_resolution(client, offer)
+    data = offer_resolver(client, offer)
     assert data is not None
     assert isinstance(data, dict)
     assert data['initial_budget'] == data['remaining_budget'] + data['budget_needed']
@@ -46,15 +52,15 @@ def test_offer_resolution(offer, client):
 
 
 # test di integrità dei dati tra due funzioni di risoluzione una dopo l'altra
-def test_2offer_resolution(offer, client):
+def test_2offer_resolver(offer, client):
     offer2 = Offer(name='test2', profit=100, budget_needed=1000, time_needed=1)
     client.budget = offer.budget_needed + offer2.budget_needed
 
-    data_1 = offer_resolution(client, offer)
+    data_1 = offer_resolver(client, offer)
     assert data_1 is not None
     counter_1 = len(client.completed_offers)
 
-    data_2 = offer_resolution(client, offer2)
+    data_2 = offer_resolver(client, offer2)
     assert data_2 is not None
     counter_2 = len(client.completed_offers)
 
@@ -71,7 +77,7 @@ def test_fails_budget_insufficient(offer, client):
     offer.budget_needed = 1000
 
     assert client.budget < offer.budget_needed
-    assert offer_resolution(client, offer) == None
+    assert offer_resolver(client, offer) == None
 
 
 # quando deve fallire
@@ -79,7 +85,7 @@ def test_fails_offer_already_done(offer, client):
     client.completed_offers.append(offer)
 
     assert offer in client.completed_offers
-    assert offer_resolution(client, offer) == None
+    assert offer_resolver(client, offer) == None
 
 
 
