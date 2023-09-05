@@ -37,6 +37,10 @@ def budget_allocation_new(clients: list, occurence: dict, total_budget: float) -
     completed_allocation = []
     remaining_budget = total_budget  # Initialize remaining_budget to total_budget
     
+    # azzerare il budget di tutti i clienti
+    for client in clients:
+        client.budget = 0
+
     # Loop through the sorted dictionary 'occurence'
     for offer_name, offer_count in occurence.items():
         # Initialize a counter for each offer
@@ -70,7 +74,6 @@ def budget_allocation_new(clients: list, occurence: dict, total_budget: float) -
                 break
                 
     print(budget_tracking)
-    print(remaining_budget)
 
     for names in completed_allocation:
         if names in occurence:
@@ -78,10 +81,6 @@ def budget_allocation_new(clients: list, occurence: dict, total_budget: float) -
 
     # se la somma dei budget di ognuno supera quella iniziale allora porco dio che cazzo succede
     if sum(budget_tracking.values()) > total_budget:
-        print(budget_tracking)
-        print(remaining_budget)
-        print(total_budget)
-        print(sum(budget_tracking.values()))
         raise Exception("Porco dio che cazzo succede")
 
     return {
@@ -214,8 +213,9 @@ def clients_list_resolver(clients: list, total_budget: float, folder: str = None
     }
 
     # SAVE STATISTICS
-    save_stats_json(statistic, folder, filename='results.json')
-    
+    ## save_stats_json(statistic, folder, filename='results.json')
+    pprint(statistic)
+
     return statistic
 
 
