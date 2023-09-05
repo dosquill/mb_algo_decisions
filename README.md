@@ -24,6 +24,12 @@ https://xmind.works/share/kllOCyb3
 mypy
 
 
+### Useful commands
+git log --graph --decorate --oneline
+git log --graph
+gitk
+
+
 ## Altro
 Dati iniziali: 
 Ogni offerta è una riga della tabella fornita sotto.
