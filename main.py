@@ -5,6 +5,7 @@ from func.clients_list_resolver import *
 from func.offer_resolver import *
 from func.step_resolver import *
 from func.client_resolver import *
+from utils.util import *
 
 
 # testing main algorithm
@@ -26,5 +27,6 @@ clients.append(client2)
 clients.append(client3)
 
 data = clients_list_resolver(clients, budget, folder) 
+
 
 

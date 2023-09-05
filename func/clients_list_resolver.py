@@ -3,9 +3,8 @@ from utils.save_to_json import *
 from func.step_resolver import step_resolver
 from func.client_resolver import client_resolver
 
-
+# TODO offerte in percentuale
 # TODO il fatto fondamentale è questo, l'algoritmo adesso va bene, ma deve considerare il fatto che il budget può essere sbilanciato per fare 
-
 
 def budget_allocation(clients: list, total_budget: float) -> dict:
     # Calculate the average ROI for each client
@@ -31,6 +30,9 @@ def budget_allocation(clients: list, total_budget: float) -> dict:
     } 
 
 
+
+
+
 # TODO quando arriva qua dentro, il budget è già stato allocato
 def budget_allocation_new(clients: list, occurence: dict, total_budget: float) -> dict:
     budget_tracking = {}
@@ -41,29 +43,21 @@ def budget_allocation_new(clients: list, occurence: dict, total_budget: float) -
     for client in clients:
         client.budget = 0
 
-    # Loop through the sorted dictionary 'occurence'
     for offer_name, offer_count in occurence.items():
         # Initialize a counter for each offer
         offer_counter = 0
         
-        # Loop through each client
         for client in clients:
-            # Loop through the client's remaining offers
             for offer in client.remaining_offers:
                 if offer.name == offer_name and offer.budget_needed <= remaining_budget:
-                    # Add the offer.budget_needed to the client's budget
                     client.budget += offer.budget_needed
                     
-                    # Update the budget tracking dictionary
                     budget_tracking[client.name] = client.budget
                     
-                    # Subtract the allocated budget from the remaining budget
                     remaining_budget -= offer.budget_needed
                     
-                    # Increment the offer counter
                     offer_counter += 1
                     
-                    # Break if the offer counter matches the offer_count
                     if offer_counter == offer_count:
                         completed_allocation.append(offer_name)
                         break
@@ -91,6 +85,9 @@ def budget_allocation_new(clients: list, occurence: dict, total_budget: float) -
     
 
 
+
+
+# TODO non si avvale di stampare le statistiche di client resolver
 # Dictionary che conta quante volte, in totale, l'offerta verrà proposta
 def offer_occurrences_dict(clients: list) -> dict:
     offer_occurrences = {}  
