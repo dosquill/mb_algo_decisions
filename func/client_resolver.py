@@ -1,6 +1,6 @@
 from pprint import pprint
 from Class.client import Client
-from utils.saving_stats import *
+from utils.save_to_json import *
 from func.step_resolver import step_resolver
 
 
@@ -91,7 +91,6 @@ def client_resolver(client: Client, folder: str = None) -> dict:
 
 
     # print(statistic)
-    #save_to_csv(statistic, folder, filename='/overall.csv')
     save_stats_json(statistic, folder, filename=f'/{client.name}/stats.json')
 
     return statistic

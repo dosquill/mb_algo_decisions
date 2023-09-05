@@ -21,7 +21,8 @@ def test_success(clients):
     
 
 
-
+def test_budget_allocation():
+    pass
 
 
 

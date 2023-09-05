@@ -1,27 +1,5 @@
-import os
 import csv
-import json
-
-
-def basic_operation(folder, filename):
-    # se la cartella non esiste, vuol dire che non avevo intenzione di salvare i dati
-    if folder is None:
-        exit()
-
-    path = f'{folder}/{filename}'
-
-    # se la cartella non esiste, creala
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-    # se quel file esiste già cancellalo
-    if os.path.exists(path):
-        os.remove(path)
-    
-    return path
-
-
-
-
+from .util import *
 
 
 def save_to_csv(statistics, folder, filename):
@@ -33,7 +11,6 @@ def save_to_csv(statistics, folder, filename):
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()  # Write header only if the file is empty
         writer.writerow(statistics)
-
 
 
 
@@ -84,10 +61,3 @@ def save_stats(statistic, folder, filename):
 
 
 
-
-
-def save_stats_json(statistic, folder, filename):
-    path = basic_operation(folder, filename)
-
-    with open(path, 'w') as outfile:
-        json.dump(statistic, outfile, indent=4, sort_keys=True)

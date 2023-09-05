@@ -25,8 +25,6 @@ clients.append(client1)
 clients.append(client2)
 clients.append(client3)
 
-client1.budget = budget
-data = client_resolver(client1, folder)
-#data = clients_list_resolver(clients, budget, folder) 
+data = clients_list_resolver(clients, budget, folder) 
 
 

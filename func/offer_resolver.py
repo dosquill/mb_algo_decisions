@@ -1,7 +1,7 @@
 from pprint import pprint
 from Class.client import Client
 from Class.offer import Offer
-from utils.saving_stats import *
+from utils.save_to_json import *
 
 
 # Nota, None è quando non si può farre, Nulla appunto
@@ -34,7 +34,6 @@ def offer_resolver(client: Client, offer: Offer, folder: str = None) -> dict:
 
     # SAVE STATISTICS
     # print(statistics)
-    # save_to_csv(statistics, folder, f'/offers/{offer.name}.csv')
     # save_stats_json(statistics, folder, f'{client.name}/offers/{offer.name}.json')
 
     return statistics
