@@ -2,87 +2,10 @@ from pprint import pprint
 from utils.save_to_json import *
 from func.step_resolver import step_resolver
 from func.client_resolver import client_resolver
+from Class.budget_manager import BudgetManager
 
 # TODO offerte in percentuale
 # TODO il fatto fondamentale è questo, l'algoritmo adesso va bene, ma deve considerare il fatto che il budget può essere sbilanciato per fare 
-
-def budget_allocation(clients: list, total_budget: float) -> dict:
-    # Calculate the average ROI for each client
-    avg_roi_per_client = {client.name: client.calculate_average_roi() for client in clients}
-    
-    # Calculate the total ROI
-    total_roi = round(sum(avg_roi_per_client.values()), 2)
-    
-    # Calculate the weight for each client
-    weights = {name: round((roi / total_roi), 2) for name, roi in avg_roi_per_client.items()}
-    
-    budget_tracking = {}
-    # Allocate the budget based on the calculated weight
-    for client in clients:
-        client.budget = round(total_budget * weights.get(client.name, 0), 2)
-        budget_tracking[client.name] = client.budget
-    
-    return {
-        'budget_tracking': budget_tracking,
-        'weights': weights,
-        'average_roi_per_client': avg_roi_per_client,
-        'total_roi': total_roi,
-    } 
-
-
-
-
-
-# TODO quando arriva qua dentro, il budget è già stato allocato
-def budget_allocation_new(clients: list, occurence: dict, total_budget: float) -> dict:
-    budget_tracking = {}
-    completed_allocation = []
-    remaining_budget = total_budget  # Initialize remaining_budget to total_budget
-    
-    # azzerare il budget di tutti i clienti
-    for client in clients:
-        client.budget = 0
-
-    for offer_name, offer_count in occurence.items():
-        # Initialize a counter for each offer
-        offer_counter = 0
-        
-        for client in clients:
-            for offer in client.remaining_offers:
-                if offer.name == offer_name and offer.budget_needed <= remaining_budget:
-                    client.budget += offer.budget_needed
-                    
-                    budget_tracking[client.name] = client.budget
-                    
-                    remaining_budget -= offer.budget_needed
-                    
-                    offer_counter += 1
-                    
-                    if offer_counter == offer_count:
-                        completed_allocation.append(offer_name)
-                        break
-            
-            # Break the outer loop if the offer counter matches the offer_count
-            if offer_counter == offer_count:
-                completed_allocation.append(offer_name)
-                break
-                
-    print(budget_tracking)
-
-    for names in completed_allocation:
-        if names in occurence:
-            del occurence[names]
-
-    # se la somma dei budget di ognuno supera quella iniziale allora porco dio che cazzo succede
-    if sum(budget_tracking.values()) > total_budget:
-        raise Exception("Porco dio che cazzo succede")
-
-    return {
-        'budget_tracking': budget_tracking,
-        'remaining_budget': remaining_budget
-    }
-
-    
 
 
 
@@ -218,3 +141,54 @@ def clients_list_resolver(clients: list, total_budget: float, folder: str = None
 
 
 
+
+
+
+# TODO quando arriva qua dentro, il initial_budget è già stato allocato
+def allocate_multiple_new(clients: list, occurence: dict, initial_budget: float) -> dict:
+    budget_tracking = {}
+    completed_allocation = []
+    remaining_budget = initial_budget  # Initialize remaining_budget to initial_budget
+    
+    # azzerare il initial_budget di tutti i clienti
+    for client in clients:
+        client.initial_budget = 0
+
+    for offer_name, offer_count in occurence.items():
+        # Initialize a counter for each offer
+        offer_counter = 0
+        
+        for client in clients:
+            for offer in client.remaining_offers:
+                if offer.name == offer_name and offer.budget_needed <= remaining_budget:
+                    client.initial_budget += offer.budget_needed
+                    
+                    budget_tracking[client.name] = client.initial_budget
+                    
+                    remaining_budget -= offer.budget_needed
+                    
+                    offer_counter += 1
+                    
+                    if offer_counter == offer_count:
+                        completed_allocation.append(offer_name)
+                        break
+            
+            # Break the outer loop if the offer counter matches the offer_count
+            if offer_counter == offer_count:
+                completed_allocation.append(offer_name)
+                break
+                
+    print(budget_tracking)
+
+    for names in completed_allocation:
+        if names in occurence:
+            del occurence[names]
+
+    # se la somma dei initial_budget di ognuno supera quella iniziale allora porco dio che cazzo succede
+    if sum(budget_tracking.values()) > initial_budget:
+        raise Exception("Porco dio che cazzo succede")
+
+    return {
+        'budget_tracking': budget_tracking,
+        'remaining_budget': remaining_budget
+    }

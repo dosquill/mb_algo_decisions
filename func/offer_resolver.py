@@ -1,42 +1,63 @@
 from pprint import pprint
 from Class.client import Client
 from Class.offer import Offer
+from Class.budget_manager import BudgetManager
 from utils.save_to_json import *
 
-
-# Nota, None è quando non si può farre, Nulla appunto
-
+# la funzione si deve solo preoccupare di risolvere le offerte
+# Qui ti do solo una lista di persone che devono fare l'offerta
 
 # part 1: risoluzione di un offerta
 # questo è il componente base. Dato un cliente e un offerta, se questa non è già stata completata la completa, budget permettendo
-def offer_resolver(client: Client, offer: Offer, folder: str = None) -> dict:
-    initial_budget = client.budget
+def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetManager = None, folder: str = None) -> dict:
+    # potrebbe essere passato, se non c'è vuol dire che deve essere nuovo
+    if bm is None:
+        bm = BudgetManager(budget, list_clients)         # passare una lista di clienti fatta solo da uno
+    num_completed = 0
 
-    # se l'offerta è già stata fatta oppure
-    # se l'offerta non si può fare per via del budget, finisci l'algoritmo
-    if offer in client.completed_offers or client.budget < offer.budget_needed:
-        return None
-    
-    # tutto normale, completa l'offerta
-    client.completed_offers.append(offer)
-    client.budget -= offer.budget_needed
-    client.profit += offer.profit
+    if list_clients is None:
+        raise ValueError("No clients in the list")
 
-    statistics = {
-        'client_name': client.name,
+
+    statistics ={
+        'initial_budget': bm.initial,
+        'offer': {
         'offer_name': offer.name,
-        'initial_budget': initial_budget,
         'budget_needed': offer.budget_needed,
-        'remaining_budget': client.budget,
         'offer_profit': offer.profit,
-        'total_profit': client.profit
+        }
     }
 
+
+    for client in bm.client_list:
+        if offer in client.completed_offers:
+            return None
+        if bm.resolving(client, offer):
+            num_completed += 1
+            client.completed_offers.append(offer)
+            
+            statistics[num_completed] = {
+                'client_name': client.name,
+                'remaining_budget': bm.remaining_budget(),
+                'total_profit': bm.profit
+            }
+        else: 
+            return None
+        
+    statistics['num_completed'] = num_completed
+
+    if num_completed == 0:
+        return None
+    
+
     # SAVE STATISTICS
-    # print(statistics)
-    # save_stats_json(statistics, folder, f'{client.name}/offers/{offer.name}.json')
+    pprint(statistics)  
+    save_stats_json(statistics, folder, f'{client.name}/offers/{offer.name}.json')
 
     return statistics
 
     
+
+
+
 
