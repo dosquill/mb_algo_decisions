@@ -1,14 +1,14 @@
 {
-    "initial_budget": 1000,
+    "initial_budget": 3000,
     "offer": {
         "offer_name": "Bwin",
         "budget_needed": 50,
         "offer_profit": 8.5
     },
     "1": {
-        "client_name": "Client 2",
-        "remaining_budget": 900,
-        "total_profit": 17.0
+        "client_name": "Pippo",
+        "remaining_budget": 2950,
+        "total_profit": 8.5
     },
     "num_completed": 1,
     "total_offer_profit": 8.5

@@ -1,5 +1,4 @@
 from pprint import pprint
-from Class.client import Client
 from Class.budget_manager import BudgetManager
 from utils.save_to_json import *
 from utils.util import *
@@ -8,30 +7,33 @@ from func.offer_resolver import offer_resolver
 
 # part 2: risoluzione di uno step
 # Aggiungiamo un altro layer, lo step. Lo step è una lista di offerte fattibili dato un budget. Quest'algoritmo lo risolve lo risolve.
-def step_resolver(list_clients: Client, budget: float, bm: BudgetManager = None, step_num: int = 1, folder: str = None) -> dict:
+def step_resolver(clients_list: list, budget: float = None, bm: BudgetManager = None, step_num: int = 1, folder: str = None) -> dict:
     if bm is None:
-        bm = BudgetManager(budget, list_clients)         # passare una lista di clienti fatta solo da uno
+        if budget is None:
+            raise Exception("BudgetManager or budget must be provided")
+        bm = BudgetManager(budget, clients_list)   
     
+
     initial_budget = bm.initial
     completed_offers = []
     inutilize_budget_percentage = 0
     num_completed = 0
     step_profit = 0
 
-    offer_occurrence = offer_occurrences_dict(list_clients)
+    offer_occurrence = offer_occurrences_dict(clients_list)
     pprint(offer_occurrence)
 
     # TODO
     # client.remaining_offers.sort(key=lambda x: x.roi, reverse=True)
 
-    min_offer = find_minimum_budget_required(list_clients)
+    min_offer = find_minimum_budget_required(clients_list)
     print(min_offer)
 
     # TODO devo iterare per il numero di offerte del dizionario in ordine di roi
 
     for key, value in offer_occurrence.items():
-        for client in list_clients:
-            offer_count = 0
+        offer_count = 0
+        for client in clients_list:
 
             # continua ad iterare
             if bm.remaining_budget() < min_offer:
@@ -42,6 +44,7 @@ def step_resolver(list_clients: Client, budget: float, bm: BudgetManager = None,
             offer = found_offer_by_name(client, key)
 
             if offer is None:
+                print(f'Client {client.name} don\' have {offer.name}')
                 continue
 
             if folder:
@@ -52,7 +55,7 @@ def step_resolver(list_clients: Client, budget: float, bm: BudgetManager = None,
             # è importante che non rompa il ciclo perché non è detto che se no può fare un offerta non ne possa fare un altra più piccola
             if data is None:
                 print(f'Client {client.name} has not enough budget to complete {offer.name}')
-                break
+                continue
 
             num_completed += 1
             offer_count += 1
@@ -63,6 +66,7 @@ def step_resolver(list_clients: Client, budget: float, bm: BudgetManager = None,
             #inutilize_budget_percentage = round((remaining_budget / initial_budget) * 100, 3)
             
             if offer_count == value:
+                offer_count = 0
                 break
 
 

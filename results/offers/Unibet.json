@@ -1,14 +1,14 @@
 {
-    "initial_budget": 1000,
+    "initial_budget": 3000,
     "offer": {
         "offer_name": "Unibet",
         "budget_needed": 120,
         "offer_profit": 6
     },
     "1": {
-        "client_name": "Client 2",
-        "remaining_budget": 10,
-        "total_profit": 119.0
+        "client_name": "Pippo",
+        "remaining_budget": 405,
+        "total_profit": 219.5
     },
     "num_completed": 1,
     "total_offer_profit": 6

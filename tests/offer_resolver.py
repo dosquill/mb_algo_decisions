@@ -1,35 +1,46 @@
 import pytest
 from Class.offer import Offer
 from Class.client import Client
+from Class.budget_manager import BudgetManager
 from func.offer_resolver import *
 
 
 @pytest.fixture
 def offer():
-    name = "test"
-    profit = 100
-    budget_needed = 1000
+    # metti valori reali
+    name = "Bwin"           
+    profit = 8.5
+    budget_needed = 50
     time_needed = 1
     return Offer(name=name, budget_needed=budget_needed, profit=profit, time_needed=time_needed)
 
+
 @pytest.fixture
-def client():
+def client_list():
+    client_list = []
+    
     all_offer = "db/all_offers.json"
     name = "Pippo"
     surname = "Caio"
     id = 1
-    return Client(name=name, surname=surname, id=id, file_path=all_offer)
+    client_list.append(Client(name, surname, id, all_offer))
 
+    return client_list
+
+
+@pytest.fixture
+def budget_manager(client_list):
+    budget = 1000
+    return BudgetManager(budget, client_list)
 
 
 # single offer resolution
-def test_offer_resolution(offer, client):
-    offer.budget_needed = 100
-    client.budget = 1000
+def test_offer_resolver(client_list, offer, budget_manager):
+    client = client_list[0]
 
     # asserzioni iniziali
-    assert client.budget >= offer.budget_needed
     assert client.budget >= 0
+    assert client.budget >= offer.budget_needed
     assert offer.budget_needed >= 0
     assert offer not in client.completed_offers   # l'offerta non è già presente nella lista di offerte completate del cliente
 
@@ -46,7 +57,7 @@ def test_offer_resolution(offer, client):
 
 
 # test di integrità dei dati tra due funzioni di risoluzione una dopo l'altra
-def test_2offer_resolution(offer, client):
+def test_2offer_resolver(offer, client):
     offer2 = Offer(name='test2', profit=100, budget_needed=1000, time_needed=1)
     client.budget = offer.budget_needed + offer2.budget_needed
 
@@ -64,9 +75,14 @@ def test_2offer_resolution(offer, client):
     assert counter_1 < counter_2
 
 
+def test_fails_no_bm(offer, cliet_list):
+    
+    pass
+
+
 
 # quando deve fallire
-def test_fails_budget_insufficient(offer, client):
+def test_fails_budget_insufficient(offer, client_list):
     client.budget = 100
     offer.budget_needed = 1000
 

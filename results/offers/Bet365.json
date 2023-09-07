@@ -1,0 +1,15 @@
+{
+    "initial_budget": 3000,
+    "offer": {
+        "offer_name": "Bet365",
+        "budget_needed": 700,
+        "offer_profit": 70
+    },
+    "1": {
+        "client_name": "Pippo",
+        "remaining_budget": 1925,
+        "total_profit": 123.5
+    },
+    "num_completed": 1,
+    "total_offer_profit": 70
+}

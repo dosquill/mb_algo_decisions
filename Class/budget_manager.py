@@ -19,17 +19,25 @@ class BudgetManager:
         self.client_list = client_list
         self.initial = initial
         self.allocated = 0
-        self.num_clients = 0
+        self.num_clients = len(client_list) > 0 and client_list or None
         self.profit = 0
 
         # 
-        self.tracking = {}
-        self.weights = {}
-        self.total_roi = {}
-        self.avg_roi_per_client = {}
+        self.budget_tracking = {}
+        self.profit_tracker = {}
+        self.commission_tracker = {}
+        for client in client_list:
+            self.budget_tracking[client.name] = 0
+            self.profit_tracker[client.name] = 0
+            self.commission_tracker[client.name] = 0
+
+
+        self.avg_roi_per_client = {client.name: client.calculate_average_roi() for client in self.client_list}
+        self.total_roi = {round(sum(self.avg_roi_per_client.values()), 2)}
+        #self.weights = {name: round((roi / self.total_roi), 2) for name, roi in self.avg_roi_per_client.items()}
 
         # initial allocation
-        self.allocate()
+        # self.allocate()
 
 
 
@@ -43,10 +51,11 @@ class BudgetManager:
             f"  Client List: {client_name}\n"
             f"  Allocated Budget: {self.allocated}€\n"
             f"  Profit: {self.profit}€\n"
-            f"  Budget Tracking: {pformat(self.tracking)}\n"
-            f"  Weights: {pformat(self.weights)}\n"
+            f"  Budget Tracking: {pformat(self.budget_tracking)}\n"
+            #f"  Weights: {pformat(self.weights)}\n"
             f"  Total ROI: {self.total_roi}%\n"
-            f"  Average ROI per Client: {pformat(self.avg_roi_per_client)}"
+            f"  Average ROI per Client: {pformat(self.avg_roi_per_client)}\n"
+            f"  Profit Tracker: {pformat(self.profit_tracker)}\n"
         )
 
 
@@ -67,7 +76,6 @@ class BudgetManager:
             self.avg_roi_per_client = {client.name: client.calculate_average_roi()}
             self.weights = {client.name: 1}
             self.total_roi = self.avg_roi_per_client[client.name]
-            self.tracking[client.name] = self.initial
             return 
 
 
@@ -82,34 +90,47 @@ class BudgetManager:
         self.weights = {name: round((roi / self.total_roi), 2) for name, roi in self.avg_roi_per_client.items()}
 
         # Allocate the initial_budget based on the calculated weight
-        self.tracking = {name: round(self.initial * weight, 2) for name, weight in self.weights.items()}
+        self.budget_tracking = {name: round(self.initial * weight, 2) for name, weight in self.weights.items()}
         
-        return 
+
+        # Se il cliente è stato consigliato, traccia la commissione
+        for client in self.client_list:
+            if client.referred_by:
+                self.commission_tracker[client.name] = self.profit_tracker[client.name] * 0.5 
+
+        
 
 
 
 
 
 
+
+
+
+    # TODO il punto è questo, se non si riesce a risolvere un offerta il budget si deve sbilanciare
     # METHOD FOR RESOLVING
     def resolving(self, client: Client, offer: Offer) -> bool:
         if (self.allocated + offer.budget_needed) > self.initial:
             return None
-        if (self.tracking[client.name] - offer.budget_needed) < 0:
-            return None
         
-        self.tracking[client.name] -= offer.budget_needed
+        # TODO questo non funziona per adesso perché il budget non tiene conto che c'è n'è altro, se si può fare un offerta non si prende i soldi da un altro cliente ma si termina e basta
+        #if (self.budget_tracking[client.name] - offer.budget_needed) < 0:
+        #    return None
+        
+        # aggiungiamo una traccia del profitto del cliente e della sua commissione
+        self.budget_tracking[client.name] += offer.budget_needed
+        self.profit_tracker[client.name] += offer.profit
         self.allocated += offer.budget_needed
         self.profit += offer.profit
         return True
     
 
-
+    # TODO da fare un releaser migliore
     def release(self, amount):
         self.initial = amount
         return self.initial
     
-
 
     def remaining_budget(self):
         return self.initial - self.allocated        

@@ -12,7 +12,10 @@ from utils.save_to_json import *
 def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetManager = None, folder: str = None) -> dict:
     # potrebbe essere passato, se non c'è vuol dire che deve essere nuovo
     if bm is None:
-        bm = BudgetManager(budget, list_clients)         # passare una lista di clienti fatta solo da uno
+        if budget is None:
+            raise Exception("BudgetManager or budget must be provided")
+        bm = BudgetManager(budget, list_clients)   
+             
     num_completed = 0
     total_offer_profit = 0
 
@@ -52,6 +55,7 @@ def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetMa
     if num_completed == 0:
         return None
     
+    print(bm)
 
     # SAVE STATISTICS
     pprint(statistics)  

@@ -1,0 +1,15 @@
+{
+    "initial_budget": 3000,
+    "offer": {
+        "offer_name": "Leovegas",
+        "budget_needed": 1400,
+        "offer_profit": 90
+    },
+    "1": {
+        "client_name": "Pippo",
+        "remaining_budget": 525,
+        "total_profit": 213.5
+    },
+    "num_completed": 1,
+    "total_offer_profit": 90
+}
