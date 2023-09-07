@@ -1,47 +1,69 @@
 from pprint import pprint
 from Class.client import Client
+from Class.budget_manager import BudgetManager
 from utils.save_to_json import *
+from utils.util import *
 from func.offer_resolver import offer_resolver
-
-
-
-
-
 
 
 # part 2: risoluzione di uno step
 # Aggiungiamo un altro layer, lo step. Lo step è una lista di offerte fattibili dato un budget. Quest'algoritmo lo risolve lo risolve.
-def step_resolver(client: Client, step_num: int = 1, folder: str = None) -> dict:
-    initial_budget = client.budget
-    profit = 0
+def step_resolver(list_clients: Client, budget: float, bm: BudgetManager = None, step_num: int = 1, folder: str = None) -> dict:
+    if bm is None:
+        bm = BudgetManager(budget, list_clients)         # passare una lista di clienti fatta solo da uno
+    
+    initial_budget = bm.initial
     completed_offers = []
-    remaining_budget = 0
     inutilize_budget_percentage = 0
     num_completed = 0
+    step_profit = 0
 
-    # la lista deve essere sempre ordinata per roi
-    client.remaining_offers.sort(key=lambda x: x.roi, reverse=True)
-
-    minimum_budget_required = min([offer.budget_needed for offer in client.remaining_offers])
+    offer_occurrence = offer_occurrences_dict(list_clients)
+    pprint(offer_occurrence)
 
     # TODO
-    for offer in client.remaining_offers:
-        if client.budget < minimum_budget_required:
-            break
-        
-        if folder:
-            data = offer_resolver(client, offer, folder=folder)
-        else:
-            data = offer_resolver(client, offer)
-        
-        
-        if data is not None:
+    # client.remaining_offers.sort(key=lambda x: x.roi, reverse=True)
+
+    min_offer = find_minimum_budget_required(list_clients)
+    print(min_offer)
+
+    # TODO devo iterare per il numero di offerte del dizionario in ordine di roi
+
+    for key, value in offer_occurrence.items():
+        for client in list_clients:
+            offer_count = 0
+
+            # continua ad iterare
+            if bm.remaining_budget() < min_offer:
+                print(f'Client {client.name} has not enough budget to complete any offer')
+                break
+            
+
+            offer = found_offer_by_name(client, key)
+
+            if offer is None:
+                continue
+
+            if folder:
+                data = offer_resolver([client], offer, bm.initial, bm, folder=folder)
+            else:
+                data = offer_resolver([client], offer, bm.initial, bm)
+            
+            # è importante che non rompa il ciclo perché non è detto che se no può fare un offerta non ne possa fare un altra più piccola
+            if data is None:
+                print(f'Client {client.name} has not enough budget to complete {offer.name}')
+                break
+
             num_completed += 1
-            profit += data['offer_profit']
+            offer_count += 1
+            step_profit += offer.profit
             completed_offers.append(offer)
-            remaining_budget = data['remaining_budget']
-            inutilize_budget_percentage = round((remaining_budget / initial_budget) * 100, 3)
-        
+            # TODO il budget rimanente è a dipendenza del client
+            #remaining_budget[client.name] = data['remaining_budget']
+            #inutilize_budget_percentage = round((remaining_budget / initial_budget) * 100, 3)
+            
+            if offer_count == value:
+                break
 
 
     # se in questa fase non sono state completate offerte, allora il budget non più sufficiente
@@ -50,25 +72,23 @@ def step_resolver(client: Client, step_num: int = 1, folder: str = None) -> dict
 
 
     # budget allocato venga restituito e che il prossimo step tenga conto dei guadagni di prima
-    client.budget = initial_budget + profit
-    # aggiornamento nuova lista
-    client.remaining_offers = [offer for offer in client.remaining_offers if offer not in client.completed_offers]
+    bm.release(initial_budget + step_profit)
 
 
     statistic = {
         'step_num': step_num,
-        'step_profit': profit,
+        'step_profit': step_profit,
         'num_completed_offers': num_completed,
         'inutilized_budget_percentage': inutilize_budget_percentage,
         'initial_budget': initial_budget,
-        'remaining_budget': remaining_budget,
+        #'remaining_budget': remaining_budget,
         'completed_offers': [offer.name for offer in completed_offers],    # aggiungi solo una lista di nomi
     }
     
 
     # SAVE STATISTICS
-    # print(statistic)
-    # save_stats_json(statistic, folder, filename=f'{client.name}/step/{step_num}.json') 
+    print(statistic)
+    save_stats_json(statistic, folder, filename=f'/step/{step_num}.json') 
 
     return statistic
 

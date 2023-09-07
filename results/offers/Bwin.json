@@ -6,9 +6,10 @@
         "offer_profit": 8.5
     },
     "1": {
-        "client_name": "Client 1",
-        "remaining_budget": 950,
-        "total_profit": 8.5
+        "client_name": "Client 2",
+        "remaining_budget": 900,
+        "total_profit": 17.0
     },
-    "num_completed": 1
+    "num_completed": 1,
+    "total_offer_profit": 8.5
 }

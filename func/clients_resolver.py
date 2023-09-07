@@ -1,36 +1,25 @@
 from pprint import pprint
 from utils.save_to_json import *
 from func.step_resolver import step_resolver
-from func.client_resolver import client_resolver
 from Class.budget_manager import BudgetManager
+from Class.client import Client
 
 # TODO offerte in percentuale
 # TODO il fatto fondamentale è questo, l'algoritmo adesso va bene, ma deve considerare il fatto che il budget può essere sbilanciato per fare 
 
 
-
-
-# TODO non si avvale di stampare le statistiche di client resolver
-# Dictionary che conta quante volte, in totale, l'offerta verrà proposta
-def offer_occurrences_dict(clients: list) -> dict:
-    offer_occurrences = {}  
-    for client in clients:
-        for offer in client.remaining_offers:
-            # Increment the count for this offer name in the dictionary
-            offer_name = offer.name  # Assuming the Offer class has a 'name' attribute
-            if offer_name in offer_occurrences:
-                offer_occurrences[offer_name] += 1
-            else:
-                offer_occurrences[offer_name] = 1
-    return offer_occurrences
-
-
-
-
-
+# part 3: risoluzione di un cliente
+# Il cliente si risolve quando non ci sono più offerte da fare o quando il budget non è più sufficiente. Lo risolve per step
 # step 4: risolutore di una lista di clienti
 # prende una lista di clienti, un budget, alloca il budget per quei clienti e ne risolve uno step
-def clients_list_resolver(clients: list, total_budget: float, folder: str = None) -> dict:
+
+def clients_resolver(clients_list: list, budget: float, folder: str = None) -> dict:
+
+    bm = BudgetManager(budget, clients_list)
+    initial_budget = bm.initial
+    step_num = 1
+    results = []
+
     initial_budget = total_budget
     total_offers_num = sum([len(client.remaining_offers) for client in clients])
 
@@ -50,7 +39,11 @@ def clients_list_resolver(clients: list, total_budget: float, folder: str = None
     
     if num_clients == 1:
         print("Only one client")
-        return client_resolver(clients[0])    
+        return client_resolver(clients[0])  
+
+
+
+  
     
 
     # prima chiamata a questa funzione per le statistiche iniziali e per l'allocazione del budget
@@ -105,10 +98,28 @@ def clients_list_resolver(clients: list, total_budget: float, folder: str = None
 
 
 
+    if len(results) == 0:
+        print("No results")
+        return None
+
+
+
+
+
+
 
     # EXITING CODE
     # COMPILE STATISTICS
-    statistic = {
+    # TODO vorrei poter suddividere le colonne che arrivano in min, max, avg
+    # molte valori si ripetono quindi li assegno
+    step_profits = [data['step_profit'] for data in results]
+    remaining_budgets = [data['remaining_budget'] for data in results]
+    num_completeds = [data['num_completed_offers'] for data in results]
+    inutilized_budgets = [data['inutilized_budget_percentage'] for data in results]
+    lenght = len(results)
+
+    # devo aggiungere current budget
+    statistics = {
         'initial_data': {
         'num_clients': num_clients,
         'initial_budget': initial_budget,
@@ -130,65 +141,68 @@ def clients_list_resolver(clients: list, total_budget: float, folder: str = None
         'final_budget': total_budget,
         'total_profit': total_budget - initial_budget,
         },
+
+
+
+        'total_profit': client.profit,
+        'initial_budget': initial_budget,
+        'num_steps': lenght,
+
+        'step_profit': {
+            'total': sum(step_profits),
+            'max': max(step_profits),
+            'avg': round((sum(step_profits) / lenght),2),
+            'min': min(step_profits),
+        },
+
+        'remaining_budget': {
+            'total': results[-1]['remaining_budget'],
+            'max': max(remaining_budgets),
+            'avg': round(sum(remaining_budgets) / lenght, 2),
+            'min': min(remaining_budgets),
+        },
+
+        'num_completed_offers': {
+            'total': sum(num_completeds),
+            'max': max(num_completeds),
+            'avg': round((sum(num_completeds) / lenght),2),
+            'min': min(num_completeds),
+        },
+
+        'inutilized_budget_percentage': {
+            'total': results[-1]['inutilized_budget_percentage'],
+            'max': max(inutilized_budgets),
+            'avg': round(sum(inutilized_budgets) / lenght, 2),
+            'min': min(inutilized_budgets),
+        },
+
+        'num_offers_per_step':{
+            'max': max(num_completeds),
+            'avg': round((sum(num_completeds) / lenght),2),
+            'min': min(num_completeds),
+
+        },
+        
+        # TODO
+        'commission': round(client.profit * 0.2, 1) ,
     }
+
+
+
+    if client.referred_by is not None:
+        statistics['referral'] = round(client.profit * 0.05, 1)
+        statistics['total_commission'] = statistics['commission'] + statistics['referral']
+
+
 
     # SAVE STATISTICS
-    ## save_stats_json(statistic, folder, filename='results.json')
-    pprint(statistic)
+    pprint(statistics)
+    save_stats_json(statistics, folder, filename=f'/stats.json')
 
-    return statistic
-
-
+    return statistics
 
 
 
 
 
-# TODO quando arriva qua dentro, il initial_budget è già stato allocato
-def allocate_multiple_new(clients: list, occurence: dict, initial_budget: float) -> dict:
-    budget_tracking = {}
-    completed_allocation = []
-    remaining_budget = initial_budget  # Initialize remaining_budget to initial_budget
-    
-    # azzerare il initial_budget di tutti i clienti
-    for client in clients:
-        client.initial_budget = 0
 
-    for offer_name, offer_count in occurence.items():
-        # Initialize a counter for each offer
-        offer_counter = 0
-        
-        for client in clients:
-            for offer in client.remaining_offers:
-                if offer.name == offer_name and offer.budget_needed <= remaining_budget:
-                    client.initial_budget += offer.budget_needed
-                    
-                    budget_tracking[client.name] = client.initial_budget
-                    
-                    remaining_budget -= offer.budget_needed
-                    
-                    offer_counter += 1
-                    
-                    if offer_counter == offer_count:
-                        completed_allocation.append(offer_name)
-                        break
-            
-            # Break the outer loop if the offer counter matches the offer_count
-            if offer_counter == offer_count:
-                completed_allocation.append(offer_name)
-                break
-                
-    print(budget_tracking)
-
-    for names in completed_allocation:
-        if names in occurence:
-            del occurence[names]
-
-    # se la somma dei initial_budget di ognuno supera quella iniziale allora porco dio che cazzo succede
-    if sum(budget_tracking.values()) > initial_budget:
-        raise Exception("Porco dio che cazzo succede")
-
-    return {
-        'budget_tracking': budget_tracking,
-        'remaining_budget': remaining_budget
-    }

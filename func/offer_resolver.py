@@ -14,6 +14,7 @@ def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetMa
     if bm is None:
         bm = BudgetManager(budget, list_clients)         # passare una lista di clienti fatta solo da uno
     num_completed = 0
+    total_offer_profit = 0
 
     if list_clients is None:
         raise ValueError("No clients in the list")
@@ -28,14 +29,15 @@ def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetMa
         }
     }
 
-
-    for client in bm.client_list:
+    
+    for client in list_clients:
         if offer in client.completed_offers:
             return None
         if bm.resolving(client, offer):
             num_completed += 1
             client.completed_offers.append(offer)
             
+            total_offer_profit += offer.profit
             statistics[num_completed] = {
                 'client_name': client.name,
                 'remaining_budget': bm.remaining_budget(),
@@ -45,6 +47,7 @@ def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetMa
             return None
         
     statistics['num_completed'] = num_completed
+    statistics['total_offer_profit'] = total_offer_profit
 
     if num_completed == 0:
         return None
@@ -52,7 +55,7 @@ def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetMa
 
     # SAVE STATISTICS
     pprint(statistics)  
-    save_stats_json(statistics, folder, f'{client.name}/offers/{offer.name}.json')
+    save_stats_json(statistics, folder, f'/offers/{offer.name}.json')
 
     return statistics
 

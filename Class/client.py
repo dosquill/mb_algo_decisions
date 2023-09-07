@@ -12,8 +12,6 @@ class Client:
         
         # optional parameters
         self.referred_by = referred_by
-        self.budget = budget                        # allocated budget
-        self.profit = profit                             # profit counter
         self.completed_offers = []
         self.remaining_offers = self.load_offers_from_file()
         self.commission = commission

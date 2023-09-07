@@ -11,6 +11,8 @@ from .offer import Offer
 # 6. Migliore nel lungo periodo
 # Budget manager si deve solo preoccupare di aggiornare, allocare e deallocare il initial_budget
 
+# TODO inutilized budget percentage
+
 class BudgetManager:
     def __init__(self, initial, client_list: list):
         #
@@ -95,7 +97,7 @@ class BudgetManager:
             return None
         if (self.tracking[client.name] - offer.budget_needed) < 0:
             return None
-
+        
         self.tracking[client.name] -= offer.budget_needed
         self.allocated += offer.budget_needed
         self.profit += offer.profit
@@ -104,10 +106,9 @@ class BudgetManager:
 
 
     def release(self, amount):
-        self.allocated -= amount
-        if self.allocated < 0:
-            raise ValueError("Allocated initial_budget cannot be negative")
-
+        self.initial = amount
+        return self.initial
+    
 
 
     def remaining_budget(self):
@@ -119,6 +120,58 @@ class BudgetManager:
 
 
 
+
+
+
+
+# TODO quando arriva qua dentro, il initial_budget è già stato allocato
+def allocate_multiple_new(clients: list, occurence: dict, initial_budget: float) -> dict:
+    budget_tracking = {}
+    completed_allocation = []
+    remaining_budget = initial_budget  # Initialize remaining_budget to initial_budget
+    
+    # azzerare il initial_budget di tutti i clienti
+    for client in clients:
+        client.initial_budget = 0
+
+    for offer_name, offer_count in occurence.items():
+        # Initialize a counter for each offer
+        offer_counter = 0
+        
+        for client in clients:
+            for offer in client.remaining_offers:
+                if offer.name == offer_name and offer.budget_needed <= remaining_budget:
+                    client.initial_budget += offer.budget_needed
+                    
+                    budget_tracking[client.name] = client.initial_budget
+                    
+                    remaining_budget -= offer.budget_needed
+                    
+                    offer_counter += 1
+                    
+                    if offer_counter == offer_count:
+                        completed_allocation.append(offer_name)
+                        break
+            
+            # Break the outer loop if the offer counter matches the offer_count
+            if offer_counter == offer_count:
+                completed_allocation.append(offer_name)
+                break
+                
+    print(budget_tracking)
+
+    for names in completed_allocation:
+        if names in occurence:
+            del occurence[names]
+
+    # se la somma dei initial_budget di ognuno supera quella iniziale allora porco dio che cazzo succede
+    if sum(budget_tracking.values()) > initial_budget:
+        raise Exception("Porco dio che cazzo succede")
+
+    return {
+        'budget_tracking': budget_tracking,
+        'remaining_budget': remaining_budget
+    }
 
     
 

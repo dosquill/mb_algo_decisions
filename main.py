@@ -1,10 +1,10 @@
 # Main file for the project
 from pprint import pprint
 from Class.client import Client 
-from func.clients_list_resolver import *
+from func.clients_resolver import *
 from func.offer_resolver import *
 from func.step_resolver import *
-from func.client_resolver import *
+from func.clients_resolver import *
 from utils.util import *
 
 

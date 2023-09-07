@@ -1,0 +1,15 @@
+{
+    "step_num": 1,
+    "step_profit": 119.0,
+    "num_completed_offers": 6,
+    "inutilized_budget_percentage": 0,
+    "initial_budget": 1000,
+    "completed_offers": [
+        "Bwin",
+        "Bwin",
+        "Williamhill",
+        "Williamhill",
+        "Unibet",
+        "Unibet"
+    ]
+}
