@@ -7,11 +7,9 @@ from func.offer_resolver import offer_resolver
 
 # part 2: risoluzione di uno step
 # Aggiungiamo un altro layer, lo step. Lo step è una lista di offerte fattibili dato un budget. Quest'algoritmo lo risolve lo risolve.
-def step_resolver(clients_list: list, budget: float = None, bm: BudgetManager = None, step_num: int = 1, folder: str = None) -> dict:
+def step_resolver(clients_list: list, bm: BudgetManager = None, step_num: int = 1, folder: str = None) -> dict:
     if bm is None:
-        if budget is None:
-            raise Exception("BudgetManager or budget must be provided")
-        bm = BudgetManager(budget, clients_list)   
+        raise Exception("BudgetManager must be provided")
     
 
     initial_budget = bm.initial

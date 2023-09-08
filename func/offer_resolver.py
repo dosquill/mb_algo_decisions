@@ -9,22 +9,20 @@ from utils.save_to_json import *
 
 # part 1: risoluzione di un offerta
 # questo è il componente base. Dato un cliente e un offerta, se questa non è già stata completata la completa, budget permettendo
-def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetManager = None, folder: str = None) -> dict:
+# quest'algoritmo risolve solo un offerta
+# l'offerta la fai o non la fai
+def offer_resolver(list_clients: list, offer: Offer, bm: BudgetManager, folder: str = None) -> dict:
     # potrebbe essere passato, se non c'è vuol dire che deve essere nuovo
     if bm is None:
-        if budget is None:
-            raise Exception("BudgetManager or budget must be provided")
-        bm = BudgetManager(budget, list_clients)   
+        raise Exception("BudgetManager must be provided")
+    if list_clients is None:
+        raise ValueError("No clients in the list")
              
     num_completed = 0
     total_offer_profit = 0
 
-    if list_clients is None:
-        raise ValueError("No clients in the list")
-
-
     statistics ={
-        'initial_budget': bm.initial,
+        'initial_budget': bm.initial_budget,
         'offer': {
         'offer_name': offer.name,
         'budget_needed': offer.budget_needed,
@@ -32,29 +30,28 @@ def offer_resolver(list_clients: list, offer: Offer, budget: float, bm: BudgetMa
         }
     }
 
-    
+    # TODO deve tener conto che il primo lo può fare ma il secondo no
+    # algorithm
     for client in list_clients:
-        if offer in client.completed_offers:
-            return None
-        if bm.resolving(client, offer):
-            num_completed += 1
-            client.completed_offers.append(offer)
-            
-            total_offer_profit += offer.profit
-            statistics[num_completed] = {
-                'client_name': client.name,
-                'remaining_budget': bm.remaining_budget(),
-                'total_profit': bm.profit
-            }
-        else: 
-            return None
+        if offer in client.completed_offers or not bm.resolving(client, offer):
+            continue
         
-    statistics['num_completed'] = num_completed
-    statistics['total_offer_profit'] = total_offer_profit
-
+        num_completed += 1
+        client.completed_offers.append(offer)
+        total_offer_profit += offer.profit
+        statistics[num_completed] = {
+            'client_name': client.name,
+            'remaining_budget': bm.remaining_budget(),
+            'total_profit': bm.profit
+        }
+    
+    # se nessun cliente ha potuto completare l'offerta allora non ritorna nullo
     if num_completed == 0:
         return None
     
+    statistics['num_completed'] = num_completed
+    statistics['total_offer_profit'] = total_offer_profit
+
     print(bm)
 
     # SAVE STATISTICS

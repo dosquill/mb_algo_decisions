@@ -5,6 +5,9 @@ from .util import *
 def save_to_csv(statistics, folder, filename):
     file_path = basic_operation(folder, filename)
     
+    if file_path is None:
+        return None
+
     fieldnames = statistics.keys()
 
     with open(file_path, 'w', newline='') as csv_file:
@@ -20,6 +23,10 @@ def save_to_csv(statistics, folder, filename):
 # better way to print
 def save_stats(statistic, folder, filename):
     path = basic_operation(folder, filename)
+
+    if path is None:
+        return None
+    
     
     # Crea un dizionario per raccogliere i dati per le colonne Min, Max e Avg
     stats_dict = {}

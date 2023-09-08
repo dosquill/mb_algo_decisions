@@ -58,6 +58,17 @@ def test_no_budget_failure(client):
 
 
 
+# TODO
+def test_one_client_runs_out_of_budget():
+    pass
+
+
+
+
+
+# TODO
+def test_one_client_complete_all_offer():
+    pass
 
 
 

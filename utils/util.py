@@ -5,7 +5,7 @@ from Class.client import Client
 def basic_operation(folder, filename):
     # se la cartella non esiste, vuol dire che non avevo intenzione di salvare i dati
     if folder is None:
-        exit()
+        return None
 
     path = f'{folder}/{filename}'
 

@@ -107,7 +107,17 @@ class Client:
         return round(total_roi / len(self.remaining_offers), 2) if len(self.remaining_offers) != 0 else 0
 
 
+    def check_offer(self, offer: Offer) -> bool:
+        if offer in self.remaining_offers:
+            return True
+        return False
 
+
+    def find_by_name(self, name: str) -> Offer:
+        for offer in self.remaining_offers:
+            if offer.name == name:
+                return offer
+        return None
 
 # TODO
 # prendi la lista di clienti da un file json

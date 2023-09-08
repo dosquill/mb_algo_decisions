@@ -14,10 +14,10 @@ from .offer import Offer
 # TODO inutilized budget percentage
 
 class BudgetManager:
-    def __init__(self, initial, client_list: list):
+    def __init__(self, initial_budget, client_list: list):
         #
         self.client_list = client_list
-        self.initial = initial
+        self.initial_budget = initial_budget
         self.allocated = 0
         self.num_clients = len(client_list) > 0 and client_list or None
         self.profit = 0
@@ -46,7 +46,7 @@ class BudgetManager:
         client_name = [client.name for client in self.client_list]
         return (
             f"BudgetManager:\n"
-            f"  Initial Budget: {self.initial}€\n"
+            f"  Initial Budget: {self.initial_budget}€\n"
             f"  Number of Clients: {self.num_clients}\n"
             f"  Client List: {client_name}\n"
             f"  Allocated Budget: {self.allocated}€\n"
@@ -111,7 +111,7 @@ class BudgetManager:
     # TODO il punto è questo, se non si riesce a risolvere un offerta il budget si deve sbilanciare
     # METHOD FOR RESOLVING
     def resolving(self, client: Client, offer: Offer) -> bool:
-        if (self.allocated + offer.budget_needed) > self.initial:
+        if (self.allocated + offer.budget_needed) > self.initial_budget:
             return None
         
         # TODO questo non funziona per adesso perché il budget non tiene conto che c'è n'è altro, se si può fare un offerta non si prende i soldi da un altro cliente ma si termina e basta
@@ -128,12 +128,12 @@ class BudgetManager:
 
     # TODO da fare un releaser migliore
     def release(self, amount):
-        self.initial = amount
-        return self.initial
+        self.initial_budget = amount
+        return self.initial_budget
     
 
     def remaining_budget(self):
-        return self.initial - self.allocated        
+        return self.initial_budget - self.allocated        
     
 
 
