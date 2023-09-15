@@ -1,10 +1,9 @@
 import json
-import warnings
 from Class.offer import Offer
 
 # non esiste un cliente senza una lista di offerte da completare. La lista può essere vuota, ma esiste
 class Client:
-    def __init__(self, name: str, surname: str, id: int, file_path: str, referred_by = "", budget = 0, profit = 0, commission = 0):
+    def __init__(self, name: str, surname: str, id: int, file_path: str, referred_by = ""):
         # mandatory parameters
         self.name = name
         self.surname = surname
@@ -15,7 +14,7 @@ class Client:
         self.referred_by = referred_by
         self.completed_offers = []
         self.remaining_offers = self.load_offers_from_file()
-        self.commission = commission
+        self.commission = 0
 
 
 
@@ -137,6 +136,7 @@ class Client:
             if offer.name == name:
                 return offer
         return None
+
 
 # TODO
 # prendi la lista di clienti da un file json
