@@ -1,14 +1,14 @@
 {
-    "initial_budget": 3000,
+    "initial_budget": 2192,
     "offer": {
         "offer_name": "Williamhill",
         "budget_needed": 325,
         "offer_profit": 45
     },
     "1": {
-        "client_name": "Pippo",
-        "remaining_budget": 2625,
-        "total_profit": 53.5
+        "client_name": "Pluto",
+        "remaining_budget": 1442,
+        "total_profit": 107.0
     },
     "num_completed": 1,
     "total_offer_profit": 45

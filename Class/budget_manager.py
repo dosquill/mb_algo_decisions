@@ -19,7 +19,7 @@ class BudgetManager:
         self.client_list = client_list
         self.initial_budget = initial_budget
         self.allocated = 0
-        self.num_clients = len(client_list) > 0 and client_list or None
+        self.num_clients = len(client_list)  
         self.profit = 0
 
         # 
@@ -112,7 +112,7 @@ class BudgetManager:
     # METHOD FOR RESOLVING
     def resolving(self, client: Client, offer: Offer) -> bool:
         if (self.allocated + offer.budget_needed) > self.initial_budget:
-            return None
+            return False
         
         # TODO questo non funziona per adesso perché il budget non tiene conto che c'è n'è altro, se si può fare un offerta non si prende i soldi da un altro cliente ma si termina e basta
         #if (self.budget_tracking[client.name] - offer.budget_needed) < 0:
@@ -126,11 +126,15 @@ class BudgetManager:
         return True
     
 
+
+
     # TODO da fare un releaser migliore
     def release(self, amount):
         self.initial_budget = amount
         return self.initial_budget
     
+
+
 
     def remaining_budget(self):
         return self.initial_budget - self.allocated        

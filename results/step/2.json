@@ -1,10 +1,11 @@
 {
     "step_num": 2,
-    "step_profit": 30,
-    "num_completed_offers": 1,
+    "step_profit": 12,
+    "num_completed_offers": 2,
     "inutilized_budget_percentage": 0,
-    "initial_budget": 3219.5,
+    "initial_budget": 2439.0,
     "completed_offers": [
-        "Domusbet"
+        "Unibet",
+        "Unibet"
     ]
 }

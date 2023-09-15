@@ -1,14 +1,15 @@
 {
     "step_num": 1,
-    "step_profit": 219.5,
-    "num_completed_offers": 5,
+    "step_profit": 247.0,
+    "num_completed_offers": 6,
     "inutilized_budget_percentage": 0,
-    "initial_budget": 3000,
+    "initial_budget": 2192,
     "completed_offers": [
         "Bwin",
+        "Bwin",
+        "Williamhill",
         "Williamhill",
         "Bet365",
-        "Leovegas",
-        "Unibet"
+        "Bet365"
     ]
 }

@@ -6,13 +6,13 @@ from func.offer_resolver import offer_resolver
 
 
 # part 2: risoluzione di uno step
-# Aggiungiamo un altro layer, lo step. Lo step è una lista di offerte fattibili dato un budget. Quest'algoritmo lo risolve lo risolve.
-def step_resolver(clients_list: list, bm: BudgetManager = None, step_num: int = 1, folder: str = None) -> dict:
+# Aggiungiamo un altro layer
+# Lo step: data una lista di clienti e dato un budget, ti mostro quali sono le offerte risolte.
+def step_resolver(clients_list: list, bm: BudgetManager, step_num: int = 1, folder: str = None) -> dict:
     if bm is None:
         raise Exception("BudgetManager must be provided")
     
-
-    initial_budget = bm.initial
+    initial_budget = bm.initial_budget
     completed_offers = []
     inutilize_budget_percentage = 0
     num_completed = 0
@@ -46,9 +46,9 @@ def step_resolver(clients_list: list, bm: BudgetManager = None, step_num: int = 
                 continue
 
             if folder:
-                data = offer_resolver([client], offer, bm.initial, bm, folder=folder)
+                data = offer_resolver([client], offer, bm, folder=folder)
             else:
-                data = offer_resolver([client], offer, bm.initial, bm)
+                data = offer_resolver([client], offer, bm)
             
             # è importante che non rompa il ciclo perché non è detto che se no può fare un offerta non ne possa fare un altra più piccola
             if data is None:

@@ -8,6 +8,7 @@ from Class.client import Client
 # TODO offerte in percentuale
 # TODO il fatto fondamentale è questo, l'algoritmo adesso va bene, ma deve considerare il fatto che il budget può essere sbilanciato per fare 
 # TODO expected_profit = total_budget * total_roi
+# dati iniziali quanti ce ne sono di offerte totali, dati finali di quante ne sono state fatte in totale
 
 # step 3: risolutore di una lista di clienti
 # Il cliente si risolve quando non ci sono più offerte da fare o quando il budget non è più sufficiente. Lo risolve per step
@@ -20,13 +21,12 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
     if num_clients == 0:
         print("No clients")
         return None
-    
 
 
 
     # INITIAL DATA
     bm = BudgetManager(budget, clients_list)
-    initial_budget = bm.initial
+    initial_budget = bm.initial_budget
     total_offers_num = sum([len(client.remaining_offers) for client in clients_list])
     offer_occurrences = offer_occurrences_dict(clients_list)
     pprint(offer_occurrences)
@@ -44,10 +44,10 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
 
 
 
-
-
+    # TODO deve poter salvare
     # ALGORITHM
-    while num_offers < total_offers_num : 
+    # finché non è step resolver mi da qualcosa
+    while num_offers < total_offers_num: 
         step_profit = 0
         
         if folder:
@@ -56,6 +56,7 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
             data = step_resolver(clients_list=clients_list, bm=bm, step_num=global_step_num)
         
         if data is not None:
+            results.append(data)
             in_between_data[global_step_num] = global_results
             step_profit += data['step_profit']
             # global_results[client.name] = data  
@@ -84,7 +85,7 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
     # EXITING CODE
     # COMPILE STATISTICS
     step_profits = [data['step_profit'] for data in results]
-    remaining_budgets = [data['remaining_budget'] for data in results]
+    # TODO remaining_budgets = [data['remaining_budget'] for data in results]
     num_completeds = [data['num_completed_offers'] for data in results]
     inutilized_budgets = [data['inutilized_budget_percentage'] for data in results]
     lenght = len(results)
@@ -113,12 +114,12 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
                 'min': min(step_profits),
             },
 
-            'remaining_budget': {
-                'total': results[-1]['remaining_budget'],
-                'max': max(remaining_budgets),
-                'avg': round(sum(remaining_budgets) / lenght, 2),
-                'min': min(remaining_budgets),
-            },
+            #'remaining_budget': {
+            #    'total': results[-1]['remaining_budget'],
+                #'max': max(remaining_budgets),
+                #'avg': round(sum(remaining_budgets) / lenght, 2),
+                #'min': min(remaining_budgets),
+            #},
 
             'num_completed_offers': {
                 'total': sum(num_completeds),

@@ -25,6 +25,22 @@ class Client:
         return f"Client {self.id}\nName: {self.name}\nSurname: {self.surname}\nReferred by: {self.referred_by}\nCommission: {self.commission}\nBudget: {self.budget}\nProfit: {self.profit}\n"
 
 
+        # Make the class iterable over its remaining_offers
+    def __iter__(self):
+        self._iter_idx = 0  # Initialize an index for iteration
+        return self
+    
+
+    def __next__(self):
+        if self._iter_idx < len(self.remaining_offers):
+            offer = self.remaining_offers[self._iter_idx]  # Fetch the current offer
+            self._iter_idx += 1  # Increment the index
+            return offer
+        else:
+            raise StopIteration  # Stop the iteration when we've gone through all remaining_offers
+
+
+
     # GETTERS AND SETTERS
     @property 
     def name(self):

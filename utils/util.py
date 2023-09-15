@@ -37,6 +37,7 @@ def offer_occurrences_dict(clients: list) -> dict:
 
 
 
+
 def find_minimum_budget_required(clients: list) -> float:
     min_budget = float('inf')  # Initialize with infinity
     
@@ -48,6 +49,30 @@ def find_minimum_budget_required(clients: list) -> float:
     return min_budget if min_budget != float('inf') else 0  # Return 0 if no offers are found
 
 
+def find_second_min_offer(clients: list) -> Offer:
+    min_offer = None
+    second_min_offer = None
+    for client in clients:
+        for offer in client.remaining_offers:
+            if min_offer is None:
+                min_offer = offer
+            elif offer.budget_needed < min_offer.budget_needed:
+                second_min_offer = min_offer
+                min_offer = offer
+            elif second_min_offer is None or offer.budget_needed < second_min_offer.budget_needed:
+                second_min_offer = offer
+    return second_min_offer
+
+
+def find_min_offer(clients: list) -> Offer:
+    min_offer = None
+    for client in clients:
+        for offer in client.remaining_offers:
+            if min_offer is None:
+                min_offer = offer
+            elif offer.budget_needed < min_offer.budget_needed:
+                min_offer = offer
+    return min_offer
 
 
 

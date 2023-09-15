@@ -21,9 +21,6 @@ def test_right_constructor():
 
 
 
-
-
-
 def test_wrong_names():
     with pytest.raises(Exception):
         Client(name='', surname='Rossi', id=1, file_path=real_file_name)
