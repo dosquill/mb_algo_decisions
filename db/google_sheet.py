@@ -1,19 +1,21 @@
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
-import os
 import json
 
 
-# google_json = os.environ.get('google_credentials')
+# mb-algorithm@form-endpoint.iam.gserviceaccount.com
+
+
 # INPUT
 spreadsheet_id = "1Fl8tSpBjKQt4yn2CFlC-i-Lg948PbtCksaRNQW4r9rw"
-credential_filepath = "service\key.json"
-# mb-algorithm@form-endpoint.iam.gserviceaccount.com
 sheet_name = "risposte_form"
 cell_range = "A:Z"
 
 
-def main():
+
+def google_sheet_service(spreadsheet_id, sheet_name, cell_range):
+    credential_filepath = "db\google_sheets\key.json"    
+    
     credentials = service_account.Credentials.from_service_account_file(
         credential_filepath, 
         scopes=["https://www.googleapis.com/auth/spreadsheets"]
@@ -32,16 +34,14 @@ def main():
     # SERIALIZATION
     json_str = json.dumps(values, indent=4)
 
-    with open('service/risposte_form.json', 'w') as json_file:
+    with open('./db/google_sheets/risposte_form.json', 'w') as json_file:
         json_file.write(json_str)
 
     print(f"Data saved to sheet_data.json")
 
 
-    #for row in values:
-    #    print(row)
 
 
 
 if __name__ == '__main__':
-    main()
+    google_sheet_service(spreadsheet_id, sheet_name, cell_range)
