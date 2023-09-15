@@ -3,10 +3,8 @@ from utils.save_to_json import *
 from func.step_resolver import step_resolver
 from utils.util import *
 from Class.budget_manager import BudgetManager
-from Class.client import Client
 
 # TODO offerte in percentuale
-# TODO il fatto fondamentale è questo, l'algoritmo adesso va bene, ma deve considerare il fatto che il budget può essere sbilanciato per fare 
 # TODO expected_profit = total_budget * total_roi
 # dati iniziali quanti ce ne sono di offerte totali, dati finali di quante ne sono state fatte in totale
 
@@ -44,7 +42,6 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
 
 
 
-    # TODO deve poter salvare
     # ALGORITHM
     # finché non è step resolver mi da qualcosa
     while num_offers < total_offers_num: 
@@ -64,8 +61,9 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
         total_profit += step_profit
         total_budget += step_profit
 
+        # TODO come varia l'allocazione nel tempo?
         # reallocate the budget for the next step
-        # in_between_data['step_allocation'] = allocation                 # TODO come varia l'allocazione nel tempo?
+        # in_between_data['step_allocation'] = allocation                 
         #bm.allocate()
 
         # non è possibile completare nessun offerta più
@@ -114,6 +112,7 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
                 'min': min(step_profits),
             },
 
+            # TODO
             #'remaining_budget': {
             #    'total': results[-1]['remaining_budget'],
                 #'max': max(remaining_budgets),
@@ -152,17 +151,19 @@ def clients_resolver(clients_list: list, budget: float, folder: str = None) -> d
             'total_profit': total_budget,
             'initial_budget': initial_budget,
             'num_steps': lenght,
+            'total_offers_done': sum(num_completeds),
+            # TODO occurrence per offers done
             # TODO per cliente quindi client1 = tot , client2 tot
             #'commission': round(client.profit * 0.2, 1) ,
             },
     }
 
 
+    # TODO
     # calcola qui le commissioni
     # if client.referred_by is not None:
     #     statistics['referral'] = round(client.profit * 0.05, 1)
     #     statistics['total_commission'] = statistics['commission'] + statistics['referral']
-
 
 
     # SAVE STATISTICS

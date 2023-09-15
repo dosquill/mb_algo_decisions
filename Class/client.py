@@ -1,4 +1,5 @@
 import json
+import warnings
 from Class.offer import Offer
 
 # non esiste un cliente senza una lista di offerte da completare. La lista può essere vuota, ma esiste
@@ -117,10 +118,12 @@ class Client:
 
         return list_offer        
     
+
     
     def calculate_average_roi(self):
         total_roi = sum(offer.roi for offer in self.remaining_offers)
         return round(total_roi / len(self.remaining_offers), 2) if len(self.remaining_offers) != 0 else 0
+
 
 
     def check_offer(self, offer: Offer) -> bool:

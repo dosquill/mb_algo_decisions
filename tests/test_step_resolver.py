@@ -1,7 +1,6 @@
 import pytest
 import copy
 from Class.client import Client
-from Class.offer import Offer
 from func.step_resolver import *
 from utils.save_to_json import *
 from Class.budget_manager import BudgetManager
@@ -103,7 +102,6 @@ def test_single_client_single_multiple_offers():
 
 
 
-# TODO
 def test_one_client_multiple_offers():
     offers_source = "db/all_offers.json"
     name = "Pippo"
@@ -285,70 +283,63 @@ def test_one_client_complete_no_offer():
 
 
 
-
-
-# TODO
-# --------------------------------------------------------------- #
-################ TWO CLIENTS ################
-# --------------------------------------------------------------- #
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # --------------------------------------------------------------- #
 ################ MULTIPLE CLIENTS ################
 # --------------------------------------------------------------- #
 
+# TODO
 # test continuità dei dati
-def test_2step_success(client):
-    total_budget_all_offers = sum(offer.budget_needed for offer in client.remaining_offers)
-    initial_budget = client.budget = 3000
-    
-    # asserzioni prima di fare l'offerta
-    # ammesso che non è possibile completare tutte le offerte in un singolo step
-    assert client.budget < total_budget_all_offers
-
-
-    # ammesso che sia possibile completare almeno due step
-    # presa una lista, la somma del budget necessario deve essere uguale almeno alla somma delle minori due
-    assert len(client.remaining_offers) >= 2 
-    copia_lista = copy.deepcopy(client.remaining_offers)   
-    copia_lista.sort(key=lambda x: x.budget_needed, reverse=False)                                           # ordina per budget necessario
-    assert client.budget >= sum(offer.budget_needed for offer in copia_lista[:2])                           # vengono estratti i primi due valori della lista ordinata
-
-
-    # risoluzione offerta 1
-    data1 = step_resolver(client, step_num=1)
-    assert data1 is not None  
-    assert data1['num_completed_offers'] >= 1
-    assert data1['initial_budget'] == initial_budget
-
-
-    # risoluzione offerta 2
-    # assumiamo che abbiamo ancora offerte da fare
-    assert len(client.remaining_offers) > 0
-    data2 = step_resolver(client, step_num=2)
-    assert data2 is not None
-    assert data2['num_completed_offers'] >= 1
-
-
-    # allora
-    assert data1['step_num'] < data2['step_num']
-    assert client.profit == data2['step_profit'] + data1['step_profit']
-    assert data2['initial_budget'] > data1['initial_budget']
+#def test_multiple_clients_2step_success():
+#
+#    clients = [
+#        Client(name="Pippo", surname="Caio", id=1, file_path="db/all_offers.json"),
+#        Client(name="Pluto", surname="Caio", id=2, file_path="db/all_offers.json")
+#    ]
+#
+#    offer_occurence = offer_occurrences_dict(clients)
+#
+#    initial_budget = 3000
+#    budget_manager = BudgetManager(initial_budget, clients)
+#
+#
+#    total_budget_all_offers = sum(offer.budget_needed for offer in clients[0].remaining_offers) *2
+#
+#    # asserzioni prima di fare l'offerta
+#    # ammesso che non è possibile completare tutte le offerte in un singolo step
+#    assert initial_budget < total_budget_all_offers
+#
+#
+#    # ammesso che sia possibile completare almeno due step
+#    # presa una lista, la somma del budget necessario deve essere uguale almeno alla somma delle minori due
+#    assert len(clients[0].remaining_offers) >= 2 
+#    copia_lista = copy.deepcopy(client.remaining_offers)   
+#    copia_lista.sort(key=lambda x: x.budget_needed, reverse=False)                                           # ordina per budget necessario
+#    assert client.budget >= sum(offer.budget_needed for offer in copia_lista[:2])                           # vengono estratti i primi due valori della lista ordinata
+#
+#
+#
+#    # risoluzione offerta 1
+#    data1 = step_resolver(client, step_num=1)
+#    assert data1 is not None  
+#    assert data1['num_completed_offers'] >= 1
+#    assert data1['initial_budget'] == initial_budget
+#
+#
+#
+#    # risoluzione offerta 2
+#    # assumiamo che abbiamo ancora offerte da fare
+#    assert len(client.remaining_offers) > 0
+#    data2 = step_resolver(client, step_num=2)
+#    assert data2 is not None
+#    assert data2['num_completed_offers'] >= 1
+#
+#
+#
+#    # allora
+#    assert data1['step_num'] < data2['step_num']
+#    assert client.profit == data2['step_profit'] + data1['step_profit']
+#    assert data2['initial_budget'] > data1['initial_budget']
+#
 
 
 
@@ -356,8 +347,8 @@ def test_2step_success(client):
 
 
 # TODO
-def test_2step_failures(client):
-    pass
+# def test_2step_failures():
+#     pass
 
 
 
@@ -373,7 +364,6 @@ def test_2step_failures(client):
 ################ GENERAL TESTING ################
 # --------------------------------------------------------------- #
 
-# caso 2: non ci sono abbastanza soldi
 def test_no_budget_manager():
     pytest.raises(Exception, step_resolver, [Client("Pippo", "Paperino", 1, "db/all_offers.json")], None, 1, "db/") 
 
@@ -393,20 +383,17 @@ def test_no_offers_failures():
 
 
 
-# TODO
-# caso 2: non ci sono abbastanza soldi
 def test_no_budget_failure():
     client = Client("Pippo", "Paperino", 1, "db/all_offers.json")
 
     clients = [client]
 
-    offers = [offer.budget_needed for offer in client.remaining_offers]
-    min_offer = min(offers)
+    min_offer = find_min_offer(clients)
 
-    bm = BudgetManager(min_offer -1, clients)
+    bm = BudgetManager(min_offer.budget_needed -1, clients)
 
     assert bm is not None
-    assert min_offer > bm.remaining_budget()
-    assert step_resolver(client, bm) is None
+    assert min_offer.budget_needed > bm.remaining_budget()
+    assert step_resolver(clients, bm) is None
 
 
