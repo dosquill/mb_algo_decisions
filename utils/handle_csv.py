@@ -1,32 +1,13 @@
-import os
 import csv
-import json
-
-
-def basic_operation(folder, filename):
-    # se la cartella non esiste, vuol dire che non avevo intenzione di salvare i dati
-    if folder is None:
-        exit()
-
-    path = f'{folder}/{filename}'
-
-    # se la cartella non esiste, creala
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-    # se quel file esiste già cancellalo
-    if os.path.exists(path):
-        os.remove(path)
-    
-    return path
-
-
-
-
+from .util import *
 
 
 def save_to_csv(statistics, folder, filename):
     file_path = basic_operation(folder, filename)
     
+    if file_path is None:
+        return None
+
     fieldnames = statistics.keys()
 
     with open(file_path, 'w', newline='') as csv_file:
@@ -39,10 +20,13 @@ def save_to_csv(statistics, folder, filename):
 
 
 
-
 # better way to print
 def save_stats(statistic, folder, filename):
     path = basic_operation(folder, filename)
+
+    if path is None:
+        return None
+    
     
     # Crea un dizionario per raccogliere i dati per le colonne Min, Max e Avg
     stats_dict = {}
@@ -84,10 +68,3 @@ def save_stats(statistic, folder, filename):
 
 
 
-
-
-def save_stats_json(statistic, folder, filename):
-    path = basic_operation(folder, filename)
-
-    with open(path, 'w') as outfile:
-        json.dump(statistic, outfile, indent=4, sort_keys=True)

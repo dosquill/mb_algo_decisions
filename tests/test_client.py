@@ -2,25 +2,20 @@ import pytest
 from Class.client import Client
 
 
-real_file_name = 'db/all_offers.json'
 
-@pytest.fixture
-def person():
-    name = "Nome"
-    surname = "Cognome"
-    id = 1
-    return Client(name = name, surname=surname, id=id, file_path=real_file_name)
+real_file_name = 'db/all_offers.json'
 
 
 
 
 def test_right_constructor():
-    assert person
+    name = "Nome"
+    surname = "Cognome"
+    id = 1
+    client = Client(name = name, surname=surname, id=id, file_path=real_file_name)
+    assert client
     
-
-
-
-
+    
 
 
 

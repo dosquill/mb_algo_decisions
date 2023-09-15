@@ -15,6 +15,14 @@ class Offer:
         return f"Name: {self.name}\nProfit: {self.profit}€\nBudget needed:{self.budget_needed}€\nROI: {self.roi}%\nTime needed: {self.time_needed}(days)"
 
 
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Offer):
+            return False
+        return (self.name == other.name and
+                self.profit == other.profit and
+                self.budget_needed == other.budget_needed and
+                self.time_needed == other.time_needed)
+
 
 
     # GETTERS AND SETTERS

@@ -1,4 +1,5 @@
 import json
+import warnings
 from Class.offer import Offer
 
 # non esiste un cliente senza una lista di offerte da completare. La lista può essere vuota, ma esiste
@@ -12,8 +13,6 @@ class Client:
         
         # optional parameters
         self.referred_by = referred_by
-        self.budget = budget                        # allocated budget
-        self.profit = profit                             # profit counter
         self.completed_offers = []
         self.remaining_offers = self.load_offers_from_file()
         self.commission = commission
@@ -25,6 +24,22 @@ class Client:
     # toString
     def __str__(self):
         return f"Client {self.id}\nName: {self.name}\nSurname: {self.surname}\nReferred by: {self.referred_by}\nCommission: {self.commission}\nBudget: {self.budget}\nProfit: {self.profit}\n"
+
+
+        # Make the class iterable over its remaining_offers
+    def __iter__(self):
+        self._iter_idx = 0  # Initialize an index for iteration
+        return self
+    
+
+    def __next__(self):
+        if self._iter_idx < len(self.remaining_offers):
+            offer = self.remaining_offers[self._iter_idx]  # Fetch the current offer
+            self._iter_idx += 1  # Increment the index
+            return offer
+        else:
+            raise StopIteration  # Stop the iteration when we've gone through all remaining_offers
+
 
 
     # GETTERS AND SETTERS
@@ -103,13 +118,25 @@ class Client:
 
         return list_offer        
     
+
     
     def calculate_average_roi(self):
-        total_roi = round(sum(offer.roi for offer in self.remaining_offers),2)
-        return total_roi / len(self.remaining_offers) if len(self.remaining_offers) != 0 else 0
+        total_roi = sum(offer.roi for offer in self.remaining_offers)
+        return round(total_roi / len(self.remaining_offers), 2) if len(self.remaining_offers) != 0 else 0
 
 
 
+    def check_offer(self, offer: Offer) -> bool:
+        if offer in self.remaining_offers:
+            return True
+        return False
+
+
+    def find_by_name(self, name: str) -> Offer:
+        for offer in self.remaining_offers:
+            if offer.name == name:
+                return offer
+        return None
 
 # TODO
 # prendi la lista di clienti da un file json

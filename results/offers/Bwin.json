@@ -1,0 +1,15 @@
+{
+    "initial_budget": 2192,
+    "offer": {
+        "offer_name": "Bwin",
+        "budget_needed": 50,
+        "offer_profit": 8.5
+    },
+    "1": {
+        "client_name": "Pluto",
+        "remaining_budget": 2092,
+        "total_profit": 17.0
+    },
+    "num_completed": 1,
+    "total_offer_profit": 8.5
+}

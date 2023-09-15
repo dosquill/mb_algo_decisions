@@ -1,0 +1,15 @@
+{
+    "initial_budget": 3219.5,
+    "offer": {
+        "offer_name": "Domusbet",
+        "budget_needed": 550,
+        "offer_profit": 30
+    },
+    "1": {
+        "client_name": "Pippo",
+        "remaining_budget": 74.5,
+        "total_profit": 249.5
+    },
+    "num_completed": 1,
+    "total_offer_profit": 30
+}
