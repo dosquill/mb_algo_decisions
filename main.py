@@ -6,19 +6,14 @@ from func.step_resolver import *
 from func.clients_resolver import *
 from utils.util import *
 
+from google_sheet.service import google_service
 
-# testing main algorithm
-budget = 2192
-folder = "results"
+# mb-algorithm@form-endpoint.iam.gserviceaccount.com
 
-# testing algorithm
-clients = [
-    Client(name="Pippo", surname="Caio", id=1, file_path="db/all_offers.json"),
-    Client(name="Pluto", surname="Caio", id=2, file_path="db/all_offers.json")
-]
+# INPUT
+form_sheet = "1Fl8tSpBjKQt4yn2CFlC-i-Lg948PbtCksaRNQW4r9rw"
+offerte_sheet = "1-rFtK4AnZ8TPSbGDGwV-UiaPfaUyqDijhe5CDQSzxtQ"
 
 
-data = clients_resolver(clients, budget, folder) 
-
-
-
+# google_service(form_sheet, "risposte_form", "A:Z", "./prova.json")
+google_service(offerte_sheet, "Offerte", "A:Z", "./prova.json")

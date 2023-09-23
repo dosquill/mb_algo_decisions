@@ -3,18 +3,8 @@ from google.oauth2 import service_account
 import json
 
 
-# mb-algorithm@form-endpoint.iam.gserviceaccount.com
-
-
-# INPUT
-spreadsheet_id = "1Fl8tSpBjKQt4yn2CFlC-i-Lg948PbtCksaRNQW4r9rw"
-sheet_name = "risposte_form"
-cell_range = "A:Z"
-
-
-
-def google_sheet_service(spreadsheet_id, sheet_name, cell_range):
-    credential_filepath = "db\google_sheets\key.json"    
+def google_service(spreadsheet_id, sheet_name, cell_range, file_path):
+    credential_filepath = "google_sheet\key.json"    
     
     credentials = service_account.Credentials.from_service_account_file(
         credential_filepath, 
@@ -34,14 +24,11 @@ def google_sheet_service(spreadsheet_id, sheet_name, cell_range):
     # SERIALIZATION
     json_str = json.dumps(values, indent=4)
 
-    with open('./db/google_sheets/risposte_form.json', 'w') as json_file:
+    with open(file_path, 'w') as json_file:
         json_file.write(json_str)
 
-    print(f"Data saved to sheet_data.json")
+    print(f"Data saved to {file_path}")
 
 
 
 
-
-if __name__ == '__main__':
-    google_sheet_service(spreadsheet_id, sheet_name, cell_range)
