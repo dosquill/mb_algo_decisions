@@ -6,14 +6,25 @@ from func.step_resolver import *
 from func.clients_resolver import *
 from utils.util import *
 
-from google_sheet.service import google_service
 
-# mb-algorithm@form-endpoint.iam.gserviceaccount.com
+from db.form.converter import form_converter
+from db.offer.converter import offer_converter
 
-# INPUT
-form_sheet = "1Fl8tSpBjKQt4yn2CFlC-i-Lg948PbtCksaRNQW4r9rw"
-offerte_sheet = "1-rFtK4AnZ8TPSbGDGwV-UiaPfaUyqDijhe5CDQSzxtQ"
+import sqlite3
 
 
-# google_service(form_sheet, "risposte_form", "A:Z", "./prova.json")
-google_service(offerte_sheet, "Offerte", "A:Z", "./prova.json")
+# form_converter()
+offer_converter()
+
+
+""" conn = sqlite3.connect("db/form/data.db")
+cursor = conn.cursor()
+
+query = "SELECT * FROM risposte_form"
+cursor.execute(query)
+result = cursor.fetchall()
+print(result)
+
+conn.close()
+ """
+
