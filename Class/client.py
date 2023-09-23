@@ -138,21 +138,3 @@ class Client:
         return None
 
 
-# TODO
-# prendi la lista di clienti da un file json
-# def get_clients_from_json(file_path: str) -> list:
-#     data = []
-# 
-#     # se il file non esiste, ritorna una lista vuota
-#     if not os.path.exists(file_path):
-#         return data
-#     
-#     with open(file_path, 'r') as json_file:
-#         data = json.load(json_file)
-#         i = 0
-#         for client in data:
-#             client = Client(data[i]['name'], data[i]['surname'], data[i]['id'], data[i]['file_path'], data[i]['referred_by'], data[i]['budget'], data[i]['profit'], data[i]['commission'])
-#             data[i] = client
-#             i+=1
-#     
-#         return data

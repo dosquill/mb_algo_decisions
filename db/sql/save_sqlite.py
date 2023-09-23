@@ -4,13 +4,15 @@ from ..google_sheet.service import google_service
 
 def create_table(cursor, table_name, columns):
     # Create a table with the provided columns, wrapping names in square brackets
-    cursor.execute(f"CREATE TABLE IF NOT EXISTS [{table_name}] ({', '.join([f'[{col}]' for col in columns])})")
+    cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY AUTOINCREMENT, {', '.join([f'[{col}]' for col in columns])})")
 
 
-def insert_data(cursor, table_name, data):
-    # Insert the provided data into the table
-    placeholders = ', '.join(['?'] * len(data[0]))
-    cursor.executemany(f"INSERT INTO {table_name} VALUES ({placeholders})", data)
+def insert_data(cursor, table_name, columns, data):
+    # Specify the column names explicitly for insertion
+    col_names = ', '.join([f'[{col}]' for col in columns])
+    placeholders = ', '.join(['?'] * len(columns))
+    cursor.executemany(f"INSERT INTO {table_name} ({col_names}) VALUES ({placeholders})", data)
+
 
 
 def save_to_sqlite(spreadsheet_id, sheet_name, cell_range, db_path):
@@ -27,7 +29,7 @@ def save_to_sqlite(spreadsheet_id, sheet_name, cell_range, db_path):
     
     # Create table and insert data
     create_table(cursor, sheet_name, columns)
-    insert_data(cursor, sheet_name, data)
+    insert_data(cursor, sheet_name, columns, data)
     
     # Commit changes and close the connection
     conn.commit()
